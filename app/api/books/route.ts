@@ -15,6 +15,7 @@ export async function GET(request: Request) {
     const allBooks = await db
       .select({
         id: books.id,
+        slug: books.slug,
         title: books.title,
         price: books.price,
         coverImage: books.coverImage,
