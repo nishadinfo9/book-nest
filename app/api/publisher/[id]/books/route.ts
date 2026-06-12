@@ -6,17 +6,17 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const { id } = await params;
+  
+  if (!id) {
+    return Response.json(
+      { message: "publisherId does not exist" },
+      { status: 401 },
+    );
+  }
+
   try {
-    const { id } = await params;
-
-    if (!id) {
-      return Response.json(
-        { message: "author id does not exist" },
-        { status: 401 },
-      );
-    }
-
-    const authorBooks = await db
+    const publisherBooks = await db
       .select({
         id: books.id,
         title: books.title,
@@ -28,17 +28,17 @@ export async function GET(
         author: authors.name,
       })
       .from(books)
-      .where(eq(books.authorId, id))
+      .where(eq(books.publisherId, id))
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
       .leftJoin(categories, eq(categories.id, books.categoryId))
       .leftJoin(authors, eq(authors.id, books.authorId))
       .orderBy(desc(books.createdAt));
 
-    return Response.json(authorBooks, { status: 200 });
+    return Response.json(publisherBooks, { status: 200 });
   } catch (error) {
-    console.log("author books not found", error);
+    console.log("publisher books not found", error);
     return Response.json(
-      { message: "author books not found" },
+      { message: "publisher books not found" },
       { status: 500 },
     );
   }
