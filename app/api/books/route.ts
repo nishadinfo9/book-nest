@@ -1,8 +1,8 @@
 import { db } from "@/lib/db/db";
-import { books, categories, publishers } from "@/lib/db/schema";
+import { authors, books, categories, publishers } from "@/lib/db/schema";
 import { uploadImageToCloudinary } from "@/lib/cloudinary/uploadImage";
 import { generateSlug } from "@/helpers/generateSlug";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { bookSchema } from "@/lib/validation";
 
 export async function GET(request: Request) {
@@ -16,21 +16,20 @@ export async function GET(request: Request) {
       .select({
         id: books.id,
         title: books.title,
-        slug: books.slug,
         price: books.price,
         coverImage: books.coverImage,
-        language: books.language,
         averageRating: books.averageRating,
-        reviewCount: books.reviewCount,
-        status: books.status,
         category: categories.name,
         publisher: publishers.name,
+        author: authors.name
       })
       .from(books)
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
       .leftJoin(categories, eq(categories.id, books.categoryId))
+      .leftJoin(authors, eq(authors.id, books.authorId))
       .limit(limit)
-      .offset((page - 1) * limit);
+      .offset((page - 1) * limit)
+      .orderBy(desc(books.createdAt));
 
     return Response.json(allBooks, { status: 200 });
   } catch (error) {
@@ -47,7 +46,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-    const file = formData.get("coverImage") as File
+    const file = formData.get("coverImage") as File;
 
     const validation = bookSchema.safeParse({
       title: formData.get("title"),
@@ -56,6 +55,7 @@ export async function POST(request: Request) {
       description: formData.get("description"),
       categoryId: formData.get("categoryId"),
       publisherId: formData.get("publisherId"),
+      authorId: formData.get("authorId"),
       language: formData.get("language") || "EN",
     });
 
@@ -91,7 +91,6 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid categoryId" }, { status: 400 });
     }
 
-  
     let coverImageUrl: string | null = null;
 
     if (file instanceof File) {
@@ -108,6 +107,7 @@ export async function POST(request: Request) {
       description: data.description || null,
       categoryId: data.categoryId,
       publisherId: data.publisherId,
+      authorId: data.authorId,
       language: data.language,
       coverImage: coverImageUrl,
       status: "PUBLISHED",
@@ -122,6 +122,11 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error creating book:", error);
 
-    return Response.json({ error: "Failed to create book" }, { status: 500 });
+    return Response.json(
+      { message: "Failed to create book", error },
+      {
+        status: 500,
+      },
+    );
   }
 }

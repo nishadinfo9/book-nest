@@ -12,8 +12,12 @@ export const bookSchema = z.object({
     .optional(),
 
   publisherId: z
-    .string()
+    .string({message: 'publisherId is required'})
     .uuid("Invalid publisher ID"),
+
+  authorId: z
+    .string({message: 'authorId is required'})
+    .uuid("Invalid author ID"),
 
   language: z
     .string()
@@ -35,7 +39,7 @@ export const bookSchema = z.object({
     .optional(),
 
   categoryId: z
-    .string()
+    .string({message: 'categoryId is required'})
     .uuid("Invalid category ID"),
 });
 
