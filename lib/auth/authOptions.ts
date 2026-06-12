@@ -1,6 +1,9 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { db } from "../db/db";
+import { users } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,31 +15,56 @@ export const authOptions: NextAuthOptions = {
       id: "credentials",
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "email",  },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        console.log("authorize called with credentials:", credentials);
-        return null;
+         console.log("authorize called:", credentials);
+
+        if (!credentials?.email) return null;
+
+        // 🔍 1. find user in DB
+        const currentUser = await db
+          .select()
+          .from(users)
+          .where(eq(users.email, credentials.email))
+          .limit(1);
+
+        const user = currentUser[0];
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
     
   ],
-  callbacks: {
+   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token._id = user.id;
+        token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
-        session.user._id = token._id as string;
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
   },
+
 
   pages: {
     signIn: "/login",

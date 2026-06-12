@@ -8,6 +8,8 @@ export async function POST(req: Request) {
 
     const { name, email, provider, externalId, } = body;
 
+    
+
     if (!name || !email) {
       return Response.json(
         { error: "Name and email are required" },
