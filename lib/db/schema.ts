@@ -44,6 +44,7 @@ export const books = pgTable("books", {
   publisherId: uuid("publisher_id").references(() => publishers.id,{onDelete: 'cascade'}),
   language: varchar("language", {length: 10,}).default("EN"),
   price: numeric("price", {precision: 10,scale: 2,}).notNull(),
+  coverImage: varchar("cover_image", { length: 500 }),
   description: text("description"),
   categoryId: uuid("category_id").references(() => categories.id, {onDelete: 'cascade'}).notNull(),
   averageRating: numeric("average_rating", {precision: 3,scale: 2,}).default("0"),
