@@ -1,7 +1,6 @@
 import { db } from "@/lib/db/db";
 import { authors, books, categories, publishers } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { Bokor } from "next/font/google";
 
 export async function GET(
   req: Request,
