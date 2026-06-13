@@ -3,7 +3,7 @@ import { authors, books, categories, publishers } from "@/lib/db/schema";
 import { uploadImageToCloudinary } from "@/lib/cloudinary/uploadImage";
 import { generateSlug } from "@/helpers/generateSlug";
 import { desc, eq } from "drizzle-orm";
-import { bookSchema } from "@/lib/validation";
+import { BookSchema } from "@/lib/validation";
 
 export async function GET(request: Request) {
   try {
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
         averageRating: books.averageRating,
         category: categories.name,
         publisher: publishers.name,
-        author: authors.name
+        author: authors.name,
       })
       .from(books)
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
@@ -48,17 +48,33 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get("coverImage") as File;
+    const title = formData.get("title");
+    const isbn13 = formData.get("isbn13");
+    const price = formData.get("price");
+    const description = formData.get("description");
+    const categoryId = formData.get("categoryId");
+    const publisherId = formData.get("publisherId");
+    const authorId = formData.get("authorId");
+    const language = formData.get("language") || "EN";
 
-    const validation = bookSchema.safeParse({
-      title: formData.get("title"),
-      isbn13: formData.get("isbn13"),
-      price: formData.get("price"),
-      description: formData.get("description"),
-      categoryId: formData.get("categoryId"),
-      publisherId: formData.get("publisherId"),
-      authorId: formData.get("authorId"),
-      language: formData.get("language") || "EN",
+    const validation = BookSchema.safeParse({
+      title,
+      isbn13,
+      price,
+      description,
+      categoryId,
+      publisherId,
+      authorId,
+      language,
     });
+    console.log({title,
+      isbn13,
+      price,
+      description,
+      categoryId,
+      publisherId,
+      authorId,
+      language,});
 
     if (!validation.success) {
       return Response.json(
@@ -71,6 +87,7 @@ export async function POST(request: Request) {
     }
 
     const data = validation.data;
+    console.log("validation.data", data);
 
     const [publisher] = await db
       .select()
@@ -97,6 +114,8 @@ export async function POST(request: Request) {
     if (file instanceof File) {
       coverImageUrl = await uploadImageToCloudinary(file, "books");
     }
+
+    console.log("coverImageUrl", coverImageUrl);
 
     const slug = generateSlug(data.title);
 

@@ -1,5 +1,6 @@
 import { db } from "@/lib/db/db";
 import { publishers } from "@/lib/db/schema";
+import { desc } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
@@ -19,5 +20,26 @@ export async function POST(request: Request) {
       { error: "publisher creatded Error" },
       { status: 500 },
     );
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+
+    const limit = Number(searchParams.get("limit") ?? 10);
+    const page = Number(searchParams.get("page") ?? 1);
+
+    const allPublishers = await db
+      .select()
+      .from(publishers)
+      .limit(limit)
+      .offset((page - 1) * limit)
+      .orderBy(desc(publishers.createdAt));
+
+    return Response.json(allPublishers, { status: 200 });
+  } catch (error) {
+    console.log("Publishers not found", error);
+    return Response.json({ message: "Publishers not found" }, { status: 500 });
   }
 }

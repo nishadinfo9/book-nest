@@ -1,4 +1,5 @@
-export interface BookInput {
+export interface BookType {
+  id?: string
   title: string;
   isbn13?: string;
   publisherId?: string;
