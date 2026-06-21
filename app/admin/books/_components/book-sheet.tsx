@@ -10,10 +10,10 @@ import { createBook } from "@/http/api";
 import { toast } from "sonner";
 import { useOpenClose } from "@/store/open-close/open-close";
 import BookForm, { FormValue } from "./book-form";
+import { BookType } from "@/types/book.type";
 
-export function BookSheet() {
+export function BookSheet({book, isEdit}: {book: BookType, isEdit: boolean}) {
   const queryClient = useQueryClient();
-
   const { isOpen, onClose } = useOpenClose();
 
   const { mutate, isPending } = useMutation({
@@ -41,8 +41,6 @@ export function BookSheet() {
     formData.append("authorId", formValue.authorId)
     formData.append("categoryId", formValue.categoryId)
     formData.append("isbn13", String(formValue.isbn13))
-
-
     mutate(formData);
   };
 
@@ -61,6 +59,8 @@ export function BookSheet() {
       <BookForm
         onSubmit={onSubmit}
         disabled={isPending}
+        book={book}
+        isEdit={isEdit}
       />
     </div>
 

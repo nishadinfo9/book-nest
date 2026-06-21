@@ -10,6 +10,11 @@ export const getSingleBook = async (slug: string) => {
   return await response.data;
 };
 
+export const getSingleBookById = async (id: string) => {
+  const response = await api.get(`/books/single/${id}`);
+  return await response.data;
+};
+
 export const createBook = async (data: FormData) => {
   const response = await api.post("/books", data, {
     headers: {

@@ -4,9 +4,9 @@ import { eq } from "drizzle-orm";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ slug: string }> },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const { slug } = await params;
+  const { id } = await params;
 
   try {
     const book = await db
@@ -14,6 +14,7 @@ export async function GET(
         id: books.id,
         title: books.title,
         price: books.price,
+        isbn13: books.isbn13,
         coverImage: books.coverImage,
         averageRating: books.averageRating,
         status: books.status,
@@ -25,7 +26,7 @@ export async function GET(
         author: authors.name,
       })
       .from(books)
-      .where(eq(books.slug, slug))
+      .where(eq(books.id, id))
       .limit(1)
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
       .leftJoin(categories, eq(categories.id, books.categoryId))
@@ -41,37 +42,5 @@ export async function GET(
   } catch (error) {
     console.error("Book not found:", error);
     return Response.json({ error: "Book not found" }, { status: 404 });
-  }
-}
-
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ slug: string }> },
-) {
-  const { slug } = await params;
-
-  try {
-    const deletedBook = await db
-      .delete(books)
-      .where(eq(books.slug, slug))
-      .returning({
-        id: books.id,
-      });
-
-    if (deletedBook.length === 0) {
-      return Response.json({ error: "Book not found" }, { status: 404 });
-    }
-
-    return Response.json(
-      {
-        message: "Book deleted successfully",
-        id: deletedBook[0].id,
-      },
-      { status: 200 },
-    );
-  } catch (error) {
-    console.error("Delete book error:", error);
-
-    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

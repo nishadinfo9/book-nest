@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,10 +9,13 @@ import { useOpenClose } from "@/store/open-close/open-close";
 import { DataTable } from "../_components/data-table";
 import ProductTableSkeleton from "./_components/table-skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteBook, getBooks } from "@/http/api";
+import { deleteBook, getBooks, getSingleBookById } from "@/http/api";
+import { useState } from "react";
 
 const ProductPage = () => {
+  const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
   const { onOpen } = useOpenClose();
+  const [isEdit, setIsEdit] = useState(Boolean)
   const queryClient = useQueryClient();
 
   const {
@@ -24,11 +27,11 @@ const ProductPage = () => {
     queryFn: getBooks,
   });
 
-
   const { mutate } = useMutation({
     mutationKey: ["delete-book"],
     mutationFn: deleteBook,
     onSuccess: (data) => {
+      console.log(data);
       toast(data.message);
       queryClient.invalidateQueries({ queryKey: ["books"] });
     },
@@ -42,12 +45,21 @@ const ProductPage = () => {
   const handleDelete = async (id: string) => {
     try {
       mutate(id);
-
-      console.log("Deleted:", id);
     } catch (error) {
       console.error("Delete failed", error);
     }
   };
+
+
+
+const handleEdit = async(id:string)=>{
+ const res = await getSingleBookById(id);
+ console.log(res.data)
+ setSelectedBook(res.data);
+ setIsEdit(res.data)
+ onOpen()
+
+}
 
   return (
     <>
@@ -56,7 +68,7 @@ const ProductPage = () => {
         <Button onClick={onOpen} size={"lg"}>
           Add Book
         </Button>
-        <BookSheet />
+        <BookSheet isEdit={isEdit} book={selectedBook}/>
       </div>
 
       {isError && (
@@ -66,7 +78,10 @@ const ProductPage = () => {
       {isLoading ? (
         <ProductTableSkeleton />
       ) : (
-        <DataTable columns={columns(handleDelete)} data={products || []} />
+        <DataTable
+          columns={columns(handleDelete, handleEdit)}
+          data={products || []}
+        />
       )}
     </>
   );

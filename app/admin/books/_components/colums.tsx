@@ -10,7 +10,10 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 
-export const columns = (onDelete: (id: string) => void,): ColumnDef<BookType>[] => [
+export const columns = (
+  onDelete: (id:string)=>void,
+  onEdit: (id: string)=>void
+): ColumnDef<BookType>[] => [
   {
   accessorKey: "coverImage",
   header: "Cover",
@@ -66,8 +69,8 @@ export const columns = (onDelete: (id: string) => void,): ColumnDef<BookType>[] 
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>View</DropdownMenuItem>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDelete(String(book.id))}>
+            <DropdownMenuItem onClick={()=> onEdit(book.id)}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDelete(String(book.slug))}>
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

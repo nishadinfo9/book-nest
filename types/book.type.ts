@@ -1,8 +1,10 @@
 export interface BookType {
   id?: string
+  slug: string
   title: string;
   isbn13?: string;
   publisherId?: string;
+  authorId?: string;
   language: string;
   price: number;
   coverImage?: string;

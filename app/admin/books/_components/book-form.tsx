@@ -1,16 +1,18 @@
+'use client'
+
 import { FormSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-
+import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react";
-
 import { useQueries } from "@tanstack/react-query";
 import { getAllAuthors, getAllCategories, getAllPublisher } from "@/http/api";
 import RHFInput from "./RHFInput";
 import RHFSelect from "./RHFSelect";
 import { FieldGroup } from "@/components/ui/field";
+import { useEffect } from "react";
+import { BookType } from "@/types/book.type";
 
 export type FormValue = z.input<typeof FormSchema>;
 export type FormOutput = z.output<typeof FormSchema>;
@@ -18,11 +20,15 @@ export type FormOutput = z.output<typeof FormSchema>;
 const BookForm = ({
   onSubmit,
   disabled,
+  book,
+  isEdit
 }: {
   onSubmit: (formValue: FormValue) => void;
   disabled: boolean;
+  book: BookType,
+  isEdit: boolean
 }) => {
-  const { handleSubmit, control } = useForm<FormValue>({
+  const { handleSubmit, control, reset } = useForm<FormValue>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
@@ -34,6 +40,25 @@ const BookForm = ({
       isbn13: ''
     },
   });
+
+   useEffect(() => {
+
+    if(book){
+      console.log('edit book', book)
+
+      reset({
+        title: book.title,
+        description: book.description,
+        price: book.price,
+        authorId: book.authorId,
+        categoryId: book.categoryId,
+        publisherId: book.publisherId,
+        isbn13: book.isbn13,
+      });
+
+    }
+
+  },[book, reset]);
 
   const [
     { data: authors = [], isLoading: authorLoading },
@@ -105,7 +130,9 @@ const BookForm = ({
           form="form-rhf-demo"
           disabled={disabled}
         >
-          {disabled ? <Loader2 className="size-4 animate-spin " /> : "Create"}
+          {disabled ? (<Loader2 className="size-4 animate-spin " />) : 
+           ( isEdit ? 'Update' : 'Create')
+          }
         </Button>
       </FieldGroup>
     </form>
