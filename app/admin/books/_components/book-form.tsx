@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
 import { FormSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {  Loader2 } from "lucide-react";
 import { useQueries } from "@tanstack/react-query";
 import { getAllAuthors, getAllCategories, getAllPublisher } from "@/http/api";
 import RHFInput from "./RHFInput";
@@ -21,12 +21,12 @@ const BookForm = ({
   onSubmit,
   disabled,
   book,
-  isEdit
+  isEdit,
 }: {
   onSubmit: (formValue: FormValue) => void;
   disabled: boolean;
-  book: BookType,
-  isEdit: boolean
+  book: BookType | null;
+  isEdit: boolean;
 }) => {
   const { handleSubmit, control, reset } = useForm<FormValue>({
     resolver: zodResolver(FormSchema),
@@ -37,14 +37,13 @@ const BookForm = ({
       authorId: "",
       categoryId: "",
       publisherId: "",
-      isbn13: ''
+      isbn13: "",
     },
   });
 
-   useEffect(() => {
-
-    if(book){
-      console.log('edit book', book)
+  useEffect(() => {
+    if (book && isEdit) {
+      console.log("edit book", book);
 
       reset({
         title: book.title,
@@ -55,10 +54,8 @@ const BookForm = ({
         publisherId: book.publisherId,
         isbn13: book.isbn13,
       });
-
     }
-
-  },[book, reset]);
+  }, [book, isEdit, reset]);
 
   const [
     { data: authors = [], isLoading: authorLoading },
@@ -91,11 +88,37 @@ const BookForm = ({
   return (
     <form id="form-rhf-demo" onSubmit={handleSubmit(submitHandler)}>
       <FieldGroup className="">
-        <RHFInput name="title" control={control} label="Title" placeholder="Title"/>
-        <RHFInput name="description" control={control} label="Description" placeholder="Description"/>
-        <RHFInput name="coverImage"control={control}label="CoverImage"type="file"/>
-        <RHFInput name="price" control={control} label="Price" type="number" placeholder="Price"/>
-        <RHFInput name="isbn13" control={control} label="ISBN13" placeholder="ISBN13"/>
+        <RHFInput
+          name="title"
+          control={control}
+          label="Title"
+          placeholder="Title"
+        />
+        <RHFInput
+          name="description"
+          control={control}
+          label="Description"
+          placeholder="Description"
+        />
+        <RHFInput
+          name="coverImage"
+          control={control}
+          label="CoverImage"
+          type="file"
+        />
+        <RHFInput
+          name="price"
+          control={control}
+          label="Price"
+          type="number"
+          placeholder="Price"
+        />
+        <RHFInput
+          name="isbn13"
+          control={control}
+          label="ISBN13"
+          placeholder="ISBN13"
+        />
 
         <RHFSelect
           name="publisherId"
@@ -130,9 +153,13 @@ const BookForm = ({
           form="form-rhf-demo"
           disabled={disabled}
         >
-          {disabled ? (<Loader2 className="size-4 animate-spin " />) : 
-           ( isEdit ? 'Update' : 'Create')
-          }
+          {disabled ? (
+            <Loader2 className="size-4 animate-spin " />
+          ) : isEdit ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
         </Button>
       </FieldGroup>
     </form>

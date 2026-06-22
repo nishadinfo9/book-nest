@@ -15,7 +15,7 @@ import { useState } from "react";
 const ProductPage = () => {
   const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
   const { onOpen } = useOpenClose();
-  const [isEdit, setIsEdit] = useState(Boolean)
+  const [isEdit, setIsEdit] = useState(false);
   const queryClient = useQueryClient();
 
   const {
@@ -50,25 +50,29 @@ const ProductPage = () => {
     }
   };
 
-
-
-const handleEdit = async(id:string)=>{
- const res = await getSingleBookById(id);
- console.log(res.data)
- setSelectedBook(res.data);
- setIsEdit(res.data)
- onOpen()
-
-}
+  const handleEdit = async (id: string) => {
+    const res = await getSingleBookById(id);
+    console.log(res.data);
+    setSelectedBook(res.data);
+    setIsEdit(true);
+    onOpen();
+  };
 
   return (
     <>
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">Books</h2>
-        <Button onClick={onOpen} size={"lg"}>
+        <Button
+          onClick={() => {
+            setSelectedBook(null);
+            setIsEdit(false);
+            onOpen();
+          }}
+          size={"lg"}
+        >
           Add Book
         </Button>
-        <BookSheet isEdit={isEdit} book={selectedBook}/>
+        <BookSheet isEdit={isEdit} book={selectedBook} />
       </div>
 
       {isError && (

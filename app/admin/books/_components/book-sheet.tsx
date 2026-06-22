@@ -14,7 +14,7 @@ import { BookType } from "@/types/book.type";
 
 type BookSheetProps = {
   isEdit: boolean;
-  book: BookType ;
+  book: BookType | null ;
 };
 
 export function BookSheet({ isEdit, book }: BookSheetProps) {
@@ -55,7 +55,9 @@ export function BookSheet({ isEdit, book }: BookSheetProps) {
 
     <SheetHeader>
       <SheetTitle className="text-2xl">
-        Create Book
+        {
+          isEdit ? 'Update Book' : 'Create Book'
+        }
       </SheetTitle>
     </SheetHeader>
 
