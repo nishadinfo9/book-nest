@@ -44,3 +44,22 @@ export const getAllAuthors = async () => {
   const response = await api.get("/authors");
   return await response.data;
 };
+
+export const createInventory = async (data: FormData) => {
+  const response = await api.post("/inventories", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const getInventories = async () => {
+  const response = await api.get("/inventories");
+  return await response.data;
+};
+
+export const deleteInventory = async (id: string) => {
+  const response = await api.delete(`/inventories/${id}`);
+  return await response.data;
+};

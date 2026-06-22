@@ -11,6 +11,7 @@ import { Controller } from "react-hook-form";
 type Option = {
   id: string;
   name: string;
+  title?: string;
 };
 
 type Props = {
@@ -49,7 +50,7 @@ export default function RHFSelect({
               ) : (
                 options.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
-                    {item.name}
+                    {item.name || item?.title}
                   </SelectItem>
                 ))
               )}
