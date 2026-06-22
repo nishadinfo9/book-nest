@@ -12,7 +12,12 @@ import { useOpenClose } from "@/store/open-close/open-close";
 import BookForm, { FormValue } from "./book-form";
 import { BookType } from "@/types/book.type";
 
-export function BookSheet({book, isEdit}: {book: BookType, isEdit: boolean}) {
+type BookSheetProps = {
+  isEdit: boolean;
+  book: BookType ;
+};
+
+export function BookSheet({ isEdit, book }: BookSheetProps) {
   const queryClient = useQueryClient();
   const { isOpen, onClose } = useOpenClose();
 

@@ -1,5 +1,5 @@
 export interface BookType {
-  id?: string
+  id: string
   slug: string
   title: string;
   isbn13?: string;

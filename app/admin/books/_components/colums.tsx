@@ -9,34 +9,44 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const columns = (
-  onDelete: (id:string)=>void,
-  onEdit: (id: string)=>void
+  onDelete: (id: string) => void,
+  onEdit: (id: string) => void,
 ): ColumnDef<BookType>[] => [
   {
-  accessorKey: "coverImage",
-  header: "Cover",
-  cell: ({ row }) => {
-    const coverImage = row.original.coverImage;
+    accessorKey: "coverImage",
+    header: "Cover",
+    cell: ({ row }) => {
+      const coverImage = row.original.coverImage;
 
-    return coverImage ? (
-      <Image
-        src={coverImage}
-        alt={row.original.title}
-        height={500}
-        width={500}
-        loading="lazy"
-        className="h-10 w-10 object-cover rounded-full"
-      />
-    ) : (
-      <span className="text-gray-400">No Image</span>
-    );
+      return coverImage ? (
+        <Image
+          src={coverImage}
+          alt={row.original.title}
+          height={500}
+          width={500}
+          loading="lazy"
+          className="h-10 w-10 object-cover rounded-full"
+        />
+      ) : (
+        <span className="text-gray-400">No Image</span>
+      );
+    },
   },
-},
   {
     accessorKey: "title",
     header: "Title",
+    cell: ({ row }) => {
+      const book = row.original;
+
+      return (
+        <Link href={`/books/${book.slug}`} className="hover:underline">
+          {book.title}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "category",
@@ -68,8 +78,9 @@ export const columns = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>View</DropdownMenuItem>
-            <DropdownMenuItem onClick={()=> onEdit(book.id)}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit(book.id)}>
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onDelete(String(book.slug))}>
               Delete
             </DropdownMenuItem>
