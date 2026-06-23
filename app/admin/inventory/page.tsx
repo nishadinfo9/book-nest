@@ -24,8 +24,6 @@ const { onOpen } = useOpenClose();
     queryFn: getInventories,
   });
 
-  console.log('inventories', inventories)
-
   const { mutate } = useMutation({
     mutationKey: ["delete-inventory"],
     mutationFn: deleteInventory,
@@ -53,14 +51,14 @@ const { onOpen } = useOpenClose();
   return (
     <>
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-tight">Books</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Inventories</h2>
         <Button
           onClick={() => {
             onOpen();
           }}
           size={"lg"}
         >
-          Add Book
+          Add Inventory
         </Button>
         <InventorySheet />
       </div>

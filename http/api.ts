@@ -1,3 +1,4 @@
+import { FormValue } from "@/app/admin/inventory/_components/inventory-form";
 import { api } from "./client";
 
 export const getBooks = async () => {
@@ -45,12 +46,8 @@ export const getAllAuthors = async () => {
   return await response.data;
 };
 
-export const createInventory = async (data: FormData) => {
-  const response = await api.post("/inventories", data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+export const createInventory = async (data: FormValue) => {
+  const response = await api.post("/inventories", data);
   return response.data;
 };
 

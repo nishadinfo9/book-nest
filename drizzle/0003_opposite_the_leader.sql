@@ -1,0 +1,1 @@
+ALTER TABLE "inventory" DROP CONSTRAINT "inventory_book_id_unique";

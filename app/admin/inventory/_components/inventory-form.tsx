@@ -6,7 +6,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { getBooks, getInventories } from "@/http/api";
+import { getBooks } from "@/http/api";
 import RHFInput from "../../_components/RHFInput";
 import RHFSelect from "../../_components/RHFSelect";
 import { FieldGroup } from "@/components/ui/field";
@@ -38,8 +38,6 @@ const InventoryForm = ({
     console.log(values);
     onSubmit(values);
   };
-
-  console.log(books, "books");
 
   return (
     <form id="form-rhf-demo" onSubmit={handleSubmit(submitHandler)}>

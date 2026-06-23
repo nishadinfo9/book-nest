@@ -13,20 +13,39 @@ export const columns = (
   onDelete: (id: string) => void,
 ): ColumnDef<InventoryType>[] => [
   {
-    accessorKey: "bookId",
-    header: "BookId",
+    accessorKey: "book",
+    header: "Books",
   },
-  {
-    accessorKey: "availableStock",
-    header: "AvailableStock",
+{
+  accessorKey: "availableStock",
+  header: "Available Stock",
+  cell: ({ row }) => {
+    const stock = row.original.availableStock;
+
+    let color = "";
+
+    if (stock >= 50) {
+      color = "text-green-600";
+    } else if (stock <= 30 && stock > 10) {
+      color = "text-yellow-400";
+    } else if (stock <= 10) {
+      color = "text-red-600";
+    }
+
+    return (
+      <span className={`${color}`}>
+        {stock}
+      </span>
+    );
   },
+},
   {
     accessorKey: "reservedStock",
-    header: "ReservedStock",
+    header: "Reserved Stock",
   },
   {
     accessorKey: "soldStock",
-    header: "SoldStock",
+    header: "Sold Stock",
   },
 
   {

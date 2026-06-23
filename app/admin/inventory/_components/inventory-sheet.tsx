@@ -17,7 +17,7 @@ export function InventorySheet() {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["create-inventory"],
-    mutationFn: async (data: FormData) => createInventory(data),
+    mutationFn: async (data: FormValue) => createInventory(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["inventories"],
@@ -38,7 +38,7 @@ export function InventorySheet() {
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="w-full sm:max-w-xl flex flex-col">
         <SheetHeader>
-          <SheetTitle className="text-2xl">Create Book</SheetTitle>
+          <SheetTitle className="text-2xl">Create Inventory</SheetTitle>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto p-4">

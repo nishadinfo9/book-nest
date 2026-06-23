@@ -22,8 +22,7 @@ export const InventorySchema = z.object({
   soldStock: z
     .number()
     .int()
-    .min(0)
-    .default(0),
+    .min(0),
 
   updatedAt: z.date().optional(),
 });
@@ -35,7 +34,6 @@ export const CreateInventorySchema = z.object({
     .number()
     .int()
     .min(0)
-    .default(0),
 });
 
 export const UpdateInventorySchema = z.object({

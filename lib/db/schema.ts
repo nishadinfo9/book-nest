@@ -74,7 +74,7 @@ export const categories = pgTable("categories", {
 
 export const inventory = pgTable("inventory", {
   id: uuid("id").defaultRandom().primaryKey(),
-  bookId: uuid("book_id").references(() => books.id, {onDelete: 'cascade'}).notNull().unique(),
+  bookId: uuid("book_id").references(() => books.id, {onDelete: 'cascade'}).notNull(),
   availableStock: integer("available_stock").default(0).notNull(),
   reservedStock: integer("reserved_stock").default(0).notNull(),
   soldStock: integer("sold_stock").default(0).notNull(),
