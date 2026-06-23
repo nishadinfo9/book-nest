@@ -8,11 +8,14 @@ import { useOpenClose } from "@/store/open-close/open-close";
 import { DataTable } from "../_components/data-table";
 import InventoryTableSkeleton from "./_components/table-skeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteInventory, getInventories } from "@/http/api";
+import { deleteInventory, getInventories, getInventoryById } from "@/http/api";
 import { InventoryType } from "@/types/inventory.type";
+import { useState } from "react";
 
 const Inventory = () => {
-const { onOpen } = useOpenClose();
+  const [selectedInventory, setSelectedInventory] = useState<InventoryType>();
+  const [isEdit, setIsEdit] = useState(false);
+  const { onOpen } = useOpenClose();
   const queryClient = useQueryClient();
 
   const {
@@ -47,6 +50,14 @@ const { onOpen } = useOpenClose();
     }
   };
 
+    const handleEdit = async (id: string) => {
+      const res = await getInventoryById(id);
+      console.log(res.data);
+      setSelectedInventory(res.data);
+      setIsEdit(true);
+      onOpen();
+    };
+
 
   return (
     <>
@@ -60,7 +71,7 @@ const { onOpen } = useOpenClose();
         >
           Add Inventory
         </Button>
-        <InventorySheet />
+        <InventorySheet  isEdit={isEdit} inventory={selectedInventory}/>
       </div>
 
       {isError && (
@@ -71,7 +82,7 @@ const { onOpen } = useOpenClose();
         <InventoryTableSkeleton />
       ) : (
         <DataTable
-          columns={columns(handleDelete)}
+          columns={columns(handleDelete, handleEdit)}
           data={inventories || []}
         />
       )}

@@ -10,8 +10,14 @@ import { createInventory } from "@/http/api";
 import { toast } from "sonner";
 import { useOpenClose } from "@/store/open-close/open-close";
 import InventoryForm, { FormValue } from "./inventory-form";
+import { InventoryType } from "@/types/inventory.type";
 
-export function InventorySheet() {
+type inventorySheetProps = {
+  isEdit: boolean;
+  inventory: InventoryType
+};
+
+export function InventorySheet({ isEdit, inventory }: inventorySheetProps) {
   const queryClient = useQueryClient();
   const { isOpen, onClose } = useOpenClose();
 
@@ -42,7 +48,12 @@ export function InventorySheet() {
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto p-4">
-          <InventoryForm onSubmit={onSubmit} disabled={isPending} />
+          <InventoryForm
+            onSubmit={onSubmit}
+            disabled={isPending}
+            isEdit={isEdit}
+            inventory={inventory}
+          />
         </div>
       </SheetContent>
     </Sheet>

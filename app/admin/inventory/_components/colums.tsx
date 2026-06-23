@@ -11,6 +11,7 @@ import { MoreHorizontal } from "lucide-react";
 
 export const columns = (
   onDelete: (id: string) => void,
+    onEdit: (id: string) => void,
 ): ColumnDef<InventoryType>[] => [
   {
     accessorKey: "book",
@@ -52,7 +53,7 @@ export const columns = (
     accessorKey: "action",
     header: "Action",
     cell: ({ row }) => {
-      const book = row.original;
+      const inventory = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -62,10 +63,10 @@ export const columns = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem >
+            <DropdownMenuItem onClick={()=> onEdit(inventory.id)}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDelete(String(book.id))}>
+            <DropdownMenuItem onClick={() => onDelete(inventory.id)}>
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

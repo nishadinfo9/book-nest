@@ -60,3 +60,8 @@ export const deleteInventory = async (id: string) => {
   const response = await api.delete(`/inventories/${id}`);
   return await response.data;
 };
+
+export const getInventoryById = async (id: string) => {
+  const response = await api.get(`/inventories/${id}`);
+  return await response.data;
+};

@@ -11,6 +11,8 @@ import RHFInput from "../../_components/RHFInput";
 import RHFSelect from "../../_components/RHFSelect";
 import { FieldGroup } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
+import { InventoryType } from "@/types/inventory.type";
+import { useEffect } from "react";
 
 export type FormValue = z.input<typeof CreateInventorySchema>;
 export type FormOutput = z.output<typeof CreateInventorySchema>;
@@ -18,16 +20,31 @@ export type FormOutput = z.output<typeof CreateInventorySchema>;
 const InventoryForm = ({
   onSubmit,
   disabled,
+  isEdit,
+  inventory,
 }: {
   onSubmit: (formValue: FormValue) => void;
   disabled: boolean;
+  isEdit: boolean;
+  inventory: InventoryType;
 }) => {
-  const { handleSubmit, control } = useForm<FormValue>({
+  const { handleSubmit, control, reset } = useForm<FormValue>({
     resolver: zodResolver(CreateInventorySchema),
     defaultValues: {
       availableStock: 0,
     },
   });
+
+  useEffect(() => {
+    if (inventory && isEdit) {
+      console.log("edit inventory", inventory);
+
+      reset({
+        bookId: inventory.bookId,
+        availableStock: inventory.availableStock,
+      });
+    }
+  }, [inventory, isEdit, reset]);
 
   const { data: books, isLoading } = useQuery({
     queryKey: ["books"],
@@ -64,7 +81,13 @@ const InventoryForm = ({
           form="form-rhf-demo"
           disabled={disabled}
         >
-          {disabled ? <Loader2 className="size-4 animate-spin " /> : "Create"}
+          {disabled ? (
+            <Loader2 className="size-4 animate-spin " />
+          ) : isEdit ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
         </Button>
       </FieldGroup>
     </form>
