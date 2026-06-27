@@ -31,6 +31,7 @@ export async function GET(
       .select({
         id: inventory.id,
         book: books.title,
+        bookId: books.id,
         availableStock: inventory.availableStock,
         reservedStock: inventory.reservedStock,
         soldStock: inventory.soldStock,

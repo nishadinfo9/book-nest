@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -27,37 +27,39 @@ const Inventory = () => {
     queryFn: getInventories,
   });
 
-  const { mutate } = useMutation({
+  const { mutate: deleteItem } = useMutation({
     mutationKey: ["delete-inventory"],
     mutationFn: deleteInventory,
     onSuccess: (data) => {
-      console.log(data);
       toast(data.message);
-      queryClient.invalidateQueries({ queryKey: ["inventories"] });
+      queryClient.invalidateQueries({
+        queryKey: ["inventories"],
+      });
     },
 
     onError: (error) => {
       toast(error.message);
-      console.error("Delete failed:", error);
     },
   });
 
-  const handleDelete = async (id: string) => {
-    try {
-      mutate(id);
-    } catch (error) {
-      console.error("Delete failed", error);
-    }
-  };
+  const { mutate: editInventory } = useMutation({
+    mutationKey: ["get-inventory-by-id"],
+    mutationFn: getInventoryById,
 
-    const handleEdit = async (id: string) => {
-      const res = await getInventoryById(id);
-      console.log(res.data);
+    onSuccess: (res) => {
       setSelectedInventory(res.data);
       setIsEdit(true);
       onOpen();
-    };
+    },
+  });
 
+  const handleDelete = (id: string) => {
+    deleteItem(id);
+  };
+
+  const handleEdit = (id: string) => {
+    editInventory(id);
+  };
 
   return (
     <>
@@ -65,13 +67,15 @@ const Inventory = () => {
         <h2 className="text-2xl font-bold tracking-tight">Inventories</h2>
         <Button
           onClick={() => {
+            setIsEdit(false);
+            setSelectedInventory(undefined);
             onOpen();
           }}
-          size={"lg"}
+          size="lg"
         >
           Add Inventory
         </Button>
-        <InventorySheet  isEdit={isEdit} inventory={selectedInventory}/>
+        <InventorySheet isEdit={isEdit} inventory={selectedInventory} />
       </div>
 
       {isError && (

@@ -46,11 +46,11 @@ export default function RHFSelect({
 
             <SelectContent>
               {loading ? (
-                <SelectItem value="loading">Loading...</SelectItem>
+                <div className="p-2 text-sm">Loading...</div>
               ) : (
                 options.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
-                    {item.name || item?.title}
+                    {item.name ?? item.title}
                   </SelectItem>
                 ))
               )}

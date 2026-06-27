@@ -13,6 +13,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
 import { InventoryType } from "@/types/inventory.type";
 import { useEffect } from "react";
+import { BookType } from "@/types/book.type";
 
 export type FormValue = z.input<typeof CreateInventorySchema>;
 export type FormOutput = z.output<typeof CreateInventorySchema>;
@@ -26,7 +27,7 @@ const InventoryForm = ({
   onSubmit: (formValue: FormValue) => void;
   disabled: boolean;
   isEdit: boolean;
-  inventory: InventoryType;
+  inventory?: InventoryType;
 }) => {
   const { handleSubmit, control, reset } = useForm<FormValue>({
     resolver: zodResolver(CreateInventorySchema),
@@ -35,21 +36,29 @@ const InventoryForm = ({
     },
   });
 
-  useEffect(() => {
-    if (inventory && isEdit) {
-      console.log("edit inventory", inventory);
-
-      reset({
-        bookId: inventory.bookId,
-        availableStock: inventory.availableStock,
-      });
-    }
-  }, [inventory, isEdit, reset]);
-
   const { data: books, isLoading } = useQuery({
     queryKey: ["books"],
     queryFn: getBooks,
   });
+
+  const bookOptions = isEdit && inventory
+  ? books?.filter((book: BookType) => book.id === inventory.bookId)
+  : books;
+
+  console.log('isEdit', isEdit)
+  console.log('inventory', inventory)
+
+useEffect(() => {
+  if (inventory && isEdit && books) {
+    reset({
+      bookId: inventory.bookId,
+      availableStock: inventory.availableStock,
+    });
+  }
+
+
+  
+}, [inventory, isEdit, reset, books]);
 
   const submitHandler = (values: FormValue) => {
     console.log(values);
@@ -64,7 +73,7 @@ const InventoryForm = ({
           control={control}
           label="Books"
           placeholder="Select Books"
-          options={books}
+          options={bookOptions ?? []}
           loading={isLoading}
         />
         <RHFInput
