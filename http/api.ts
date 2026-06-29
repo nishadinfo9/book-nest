@@ -1,5 +1,6 @@
 import { FormValue } from "@/app/admin/inventory/_components/inventory-form";
 import { api } from "./client";
+import { AuthorFormValue } from "@/app/admin/authors/_components/authors-form";
 
 export const getBooks = async () => {
   const response = await api.get("/books");
@@ -44,6 +45,22 @@ export const getAllPublisher = async () => {
 export const getAllAuthors = async () => {
   const response = await api.get("/authors");
   return await response.data;
+};
+
+
+export const getAuthorById = async (id: string) => {
+  const response = await api.get(`/authors/${id}`);
+  return await response.data;
+};
+
+export const deleteAuthor = async (id: string) => {
+  const response = await api.delete(`/authors/${id}`);
+  return await response.data;
+};
+
+export const createAuthor = async (data: AuthorFormValue) => {
+  const response = await api.post("/authors", data);
+  return response.data;
 };
 
 export const createInventory = async (data: FormValue) => {

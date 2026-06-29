@@ -15,7 +15,7 @@ const Sidebar = () => {
   const navItems = [
     { label: "Dashboard", href: "/admin/dashboard", icon: HomeIcon },
     { label: "Books", href: "/admin/books", icon: Layers },
-    { label: "Author", href: "/admin/author", icon: Warehouse },
+    { label: "Authors", href: "/admin/authors", icon: Warehouse },
     { label: "Deliver Persons", href: "/admin/delivery-persons", icon: Users },
     { label: "Orders", href: "/admin/orders", icon: ShoppingCart },
     { label: "Inventory", href: "/admin/inventory", icon: Blocks },
