@@ -1,9 +1,14 @@
-import React from 'react'
+import HeroBanner from "@/components/global-components/HeroBanner";
+import PopularAuthors from "@/components/global-components/PopularAuthors";
+import React from "react";
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <div>
+      <HeroBanner />
+      <PopularAuthors />
+    </div>
+  );
+};
 
-export default Home
+export default Home;
