@@ -11,6 +11,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
 
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Shop", path: "/shop" },
+    { name: "E-book", path: "/e-book" },
+    { name: "About", path: "/about" },
+  ];
+
   return (
     <header className="w-full border-b border-gray-200">
       <nav
@@ -39,21 +46,11 @@ export default function Navbar() {
           className="hidden md:flex items-center gap-8 text-sm font-medium  text-gray-700
         "
         >
-          <Link href="/" className="hover:text-black">
-            Home
-          </Link>
-
-          <Link href="/books" className="hover:text-black">
-            Books
-          </Link>
-
-          <Link href="/ebooks" className="hover:text-black">
-            E-book
-          </Link>
-
-          <Link href="/about" className="hover:text-black">
-            About
-          </Link>
+          {navItems.map((item, i) => (
+            <Link key={i} href={item.path} className="hover:text-black">
+              {item.name}
+            </Link>
+          ))}
         </div>
 
         {/* Actions - Fixed width */}
