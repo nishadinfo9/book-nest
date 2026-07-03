@@ -1,0 +1,1 @@
+ALTER TABLE "books" ADD COLUMN "discount_price" numeric(10, 2) NOT NULL;

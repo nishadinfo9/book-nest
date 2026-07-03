@@ -41,6 +41,7 @@ export function BookSheet({ isEdit, book }: BookSheetProps) {
     formData.append("title", formValue.title);
     formData.append("description", String(formValue.description));
     formData.append("price", String(formValue.price));
+    formData.append("discountPrice", String(formValue.discountPrice));
     formData.append("coverImage", formValue.coverImage);
     formData.append("publisherId", formValue.publisherId)
     formData.append("authorId", formValue.authorId)

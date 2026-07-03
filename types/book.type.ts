@@ -10,4 +10,7 @@ export interface BookType {
   coverImage?: string;
   description?: string;
   categoryId: string;
+  averageRating?: number;
+  author?: string;
+  discountPrice?: number;
 }

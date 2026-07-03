@@ -29,6 +29,11 @@ export const BookSchema = z.object({
     .number()
     .positive("Price must be greater than 0"),
 
+  discountPrice: z
+    .coerce
+    .number()
+    .positive("Discount price must be greater than 0"),
+
   coverImage: z
     .string()
     .url("Invalid cover image URL")
@@ -74,6 +79,11 @@ isbn13: z
     .coerce
     .number()
     .positive("Price must be greater than 0"),
+
+  discountPrice: z
+    .coerce
+    .number()
+    .positive("Discount price must be greater than 0"),
 
   description: z
     .string()

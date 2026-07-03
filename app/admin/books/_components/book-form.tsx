@@ -34,6 +34,7 @@ const BookForm = ({
       title: "",
       description: "",
       price: 0,
+      discountPrice: 0,
       authorId: "",
       categoryId: "",
       publisherId: "",
@@ -49,6 +50,7 @@ const BookForm = ({
         title: book.title,
         description: book.description,
         price: book.price,
+        discountPrice: book.discountPrice,
         authorId: book.authorId,
         categoryId: book.categoryId,
         publisherId: book.publisherId,
@@ -112,6 +114,13 @@ const BookForm = ({
           label="Price"
           type="number"
           placeholder="Price"
+        />
+        <RHFInput
+          name="discountPrice"
+          control={control}
+          label="Discount Price"
+          type="number"
+          placeholder="Discount Price"
         />
         <RHFInput
           name="isbn13"

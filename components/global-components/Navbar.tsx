@@ -7,9 +7,11 @@ import Logo from "./logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {  useSession } from "next-auth/react";
 
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
+  const { status } = useSession()
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -51,6 +53,13 @@ export default function Navbar() {
               {item.name}
             </Link>
           ))}
+          {
+            status === "authenticated" ? (
+              <Link href="/admin/dashboard" className="hover:text-black">
+                Dashboard
+              </Link>
+            ) : null
+          }
         </div>
 
         {/* Actions - Fixed width */}

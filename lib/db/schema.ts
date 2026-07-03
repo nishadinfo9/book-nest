@@ -45,6 +45,7 @@ export const books = pgTable("books", {
   authorId: uuid("author_id").references(() => authors.id,{onDelete: 'set null'}),
   language: varchar("language", {length: 10,}).default("EN"),
   price: numeric("price", {precision: 10,scale: 2,}).notNull(),
+  discountPrice: numeric("discount_price", {precision: 10,scale: 2,}).notNull(),
   coverImage: varchar("cover_image", { length: 500 }),
   description: text("description"),
   categoryId: uuid("category_id").references(() => categories.id, {onDelete: 'set null'}),

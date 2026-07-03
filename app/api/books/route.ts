@@ -55,12 +55,14 @@ export async function POST(request: Request) {
     const categoryId = formData.get("categoryId");
     const publisherId = formData.get("publisherId");
     const authorId = formData.get("authorId");
+    const discountPrice = formData.get("discountPrice");
     const language = formData.get("language") || "EN";
 
     const validation = BookSchema.safeParse({
       title,
       isbn13,
       price,
+      discountPrice,
       description,
       categoryId,
       publisherId,
@@ -70,6 +72,7 @@ export async function POST(request: Request) {
     console.log({title,
       isbn13,
       price,
+      discountPrice,
       description,
       categoryId,
       publisherId,
@@ -124,6 +127,7 @@ export async function POST(request: Request) {
       slug,
       isbn13: data.isbn13 || null,
       price: data.price.toString(),
+      discountPrice: data.discountPrice.toString(),
       description: data.description || null,
       categoryId: data.categoryId,
       publisherId: data.publisherId,

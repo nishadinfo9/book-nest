@@ -3,6 +3,8 @@ import {  Poppins } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import { QueryProvider } from "@/provider/query-provider";
+import { authOptions } from "@/lib/auth/authOptions";
+import AuthProvider from "@/provider/AuthProvider";
 
 const poppins = Poppins({
   weight: ["100","200","300","400", "500", "600", "700", "800", "900"],
@@ -21,7 +23,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
 
   return (
     <html
@@ -30,9 +32,9 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <QueryProvider>
-          {/* <AuthProvider session={session}> */}
+          <AuthProvider session={session}>
           <main>{children}</main>
-          {/* </AuthProvider> */}
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>
