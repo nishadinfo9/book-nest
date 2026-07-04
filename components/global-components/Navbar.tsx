@@ -84,7 +84,7 @@ export default function Navbar() {
               w-72
             "
             >
-              <div className="relative">
+              <div className="relative pl-10">
                 <Input
                   autoFocus
                   placeholder="Search books..."

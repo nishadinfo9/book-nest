@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { getBooks } from '@/http/api';
 import { BookType } from '@/types/book.type';
+import Link from 'next/link';
 
 // const books = [
 //   {
@@ -51,8 +52,6 @@ export default function BookGrid() {
     queryFn: getBooks,
   });
 
-  console.log('books', books)
-
   return (
     <section className='mt-8 px-10'>
       <div className='mb-6 flex items-center justify-between'>
@@ -67,12 +66,14 @@ export default function BookGrid() {
             {/* book image */}
 
             <div className='relative h-[180px] overflow-hidden rounded-md bg-gray-100'>
+             <Link href={`/shop/${book.slug}`} >
               <Image
                 src={book.coverImage}
                 alt={book.title}
                 fill
                 className='object-contain p-2 transition group-hover:scale-105'
               />
+             </Link>
             </div>
 
             {/* info */}

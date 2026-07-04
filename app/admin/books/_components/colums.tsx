@@ -42,7 +42,7 @@ export const columns = (
       const book = row.original;
 
       return (
-        <Link href={`/books/${book.slug}`} className="hover:underline">
+        <Link href={`/shop/${book.slug}`} className="hover:underline">
           {book.title}
         </Link>
       );
