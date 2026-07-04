@@ -75,7 +75,7 @@ const AuthorPage = () => {
         >
           Add Author
         </Button>
-        <AuthorSheet isEdit={isEdit} author={selectedAuthor} />
+        <AuthorSheet isEdit={isEdit} authors={selectedAuthor} />
       </div>
 
       {isError && (

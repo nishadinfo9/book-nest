@@ -14,7 +14,7 @@ import AuthorForm, { AuthorFormValue } from "./authors-form";
 
 type authorSheetProps = {
   isEdit: boolean;
-  authors: Author
+  authors: Author | undefined;
 };
 
 export function AuthorSheet({ isEdit, authors }: authorSheetProps) {

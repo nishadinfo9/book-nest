@@ -14,7 +14,7 @@ import { InventoryType } from "@/types/inventory.type";
 
 type inventorySheetProps = {
   isEdit: boolean;
-  inventory: InventoryType
+  inventory: InventoryType | undefined;
 };
 
 export function InventorySheet({ isEdit, inventory }: inventorySheetProps) {
