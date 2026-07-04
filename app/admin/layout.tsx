@@ -37,6 +37,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getServerSession(authOptions);
+  console.log(session, "session");
 
   const navItems = [
     { label: "Dashboard", href: "/admin", icon: HomeIcon },
