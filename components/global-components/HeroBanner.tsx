@@ -50,7 +50,7 @@ export default function HeroBanner() {
   }, [emblaApi]);
 
   return (
-    <section className="px-10 mt-8">
+    <section className="mt-8 max-w-7xl px-6 mx-auto">
       <div
         className="relative overflow-hidden rounded-2xl bg-[#5bb4d4]
 "

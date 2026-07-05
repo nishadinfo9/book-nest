@@ -18,7 +18,7 @@ export default function BookList() {
   });
 
   return (
-    <section className='mt-8 px-10'>
+    <section className='mt-8 max-w-7xl px-6 mx-auto'>
       <div className='mb-6 flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>Recently Added</h2>
 

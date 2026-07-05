@@ -1,42 +1,33 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { Search, Heart, ShoppingCart, X } from "lucide-react";
-import Logo from "./logo";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {  useSession } from "next-auth/react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { Search, Heart, ShoppingCart, X } from 'lucide-react';
+import Logo from './logo';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { useSession } from 'next-auth/react';
 
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
-  const { status } = useSession()
+  const { status } = useSession();
 
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "E-book", path: "/e-book" },
-    { name: "About", path: "/about" },
+    { name: 'Home', path: '/' },
+    { name: 'Shop', path: '/shop' },
+    { name: 'E-book', path: '/e-book' },
+    { name: 'About', path: '/about' },
   ];
 
   return (
-    <header className="w-full border-b border-gray-200">
-      <nav
-        className="
-        max-w-7xl 
-        mx-auto 
-        h-20 
-        px-6 
-        flex 
-        items-center
-      "
-      >
+    <header className='w-full border-b border-gray-200'>
+      <nav className='mx-auto flex h-20 max-w-7xl items-center px-6'>
         {/* Logo - Fixed */}
-        <div className="flex-1">
+        <div className='flex-1'>
           <Link
-            href="/"
-            className="text-2xl font-bold tracking-tight flex items-center gap-2"
+            href='/'
+            className='flex items-center gap-2 text-2xl font-bold tracking-tight'
           >
             <Logo />
             BookNest
@@ -44,56 +35,34 @@ export default function Navbar() {
         </div>
 
         {/* Navigation - Fixed Center */}
-        <div
-          className="hidden md:flex items-center gap-8 text-sm font-medium  text-gray-700
-        "
-        >
+        <div className='hidden items-center gap-8 text-sm font-medium text-gray-700 md:flex'>
           {navItems.map((item, i) => (
-            <Link key={i} href={item.path} className="hover:text-black">
+            <Link key={i} href={item.path} className='hover:text-black'>
               {item.name}
             </Link>
           ))}
-          {
-            status === "authenticated" ? (
-              <Link href="/admin/dashboard" className="hover:text-black">
-                Dashboard
-              </Link>
-            ) : null
-          }
+          {status === 'authenticated' ? (
+            <Link href='/admin/dashboard' className='hover:text-black'>
+              Dashboard
+            </Link>
+          ) : null}
         </div>
 
         {/* Actions - Fixed width */}
-        <div
-          className="
-          flex-1 
-          flex 
-          justify-end 
-          items-center 
-          gap-4
-          relative
-        "
-        >
+        <div className='relative flex flex-1 items-center justify-end gap-4'>
           {/* Search Expand */}
           {openSearch && (
-            <div
-              className="
-              absolute
-              right-40
-              top-1/2
-              -translate-y-1/2
-              w-72
-            "
-            >
-              <div className="relative pl-10">
+            <div className='absolute top-1/2 right-40 w-72 -translate-y-1/2'>
+              <div className='relative pl-10'>
                 <Input
                   autoFocus
-                  placeholder="Search books..."
-                  className="pr-10 rounded-full"
+                  placeholder='Search books...'
+                  className='rounded-full pr-10'
                 />
 
                 <button
-                  type="button"
-                  className=" absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center"
+                  type='button'
+                  className='absolute top-1/2 right-2 flex h-8 w-8 -translate-y-1/2 items-center justify-center'
                   onClick={() => setOpenSearch(false)}
                 >
                   <X size={18} />
@@ -105,8 +74,8 @@ export default function Navbar() {
           {/* Search Icon */}
           {!openSearch && (
             <Button
-              size="icon"
-              variant="ghost"
+              size='icon'
+              variant='ghost'
               onClick={() => setOpenSearch(true)}
             >
               <Search size={20} />
@@ -114,21 +83,21 @@ export default function Navbar() {
           )}
 
           {/* Wishlist */}
-          <Button size="icon" variant="ghost" asChild>
-            <Link href="/wishlist">
+          <Button size='icon' variant='ghost' asChild>
+            <Link href='/wishlist'>
               <Heart size={20} />
             </Link>
           </Button>
 
           {/* Cart */}
-          <Button size="icon" variant="ghost" asChild>
-            <Link href="/cart">
+          <Button size='icon' variant='ghost' asChild>
+            <Link href='/cart'>
               <ShoppingCart size={20} />
             </Link>
           </Button>
 
           {/* Avatar */}
-          <Avatar className="cursor-pointer">
+          <Avatar className='cursor-pointer'>
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
         </div>

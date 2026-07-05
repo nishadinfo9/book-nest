@@ -26,7 +26,7 @@ const offers = [
 
 export default function OfferCards() {
   return (
-    <section className='py-8'>
+    <section className='mt-8 max-w-7xl px-6 mx-auto'>
       <div className='grid grid-cols-3 gap-6'>
         {offers.map((offer) => (
           <div
