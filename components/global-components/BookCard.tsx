@@ -5,8 +5,11 @@ import { Heart, Star } from 'lucide-react';
 import { Button } from '../ui/button';
 import { BookType } from '@/types/book.type';
 import Link from 'next/link';
+import { useCart } from '@/hooks/useCart';
 
 export default function BookCard({ book }: { book: BookType }) {
+  const { addToCart } = useCart();
+
   return (
     <div className='group'>
       {/* Book Image */}
@@ -53,7 +56,7 @@ export default function BookCard({ book }: { book: BookType }) {
             ${book.discountPrice}
           </span>
 
-          <Button size='sm' className='ml-auto'>
+          <Button size='sm' className='ml-auto' onClick={() => addToCart(book)}>
             Add to Cart
           </Button>
         </div>

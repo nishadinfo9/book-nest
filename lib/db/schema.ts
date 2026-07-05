@@ -84,8 +84,8 @@ export const inventory = pgTable("inventory", {
 
 export const cartItems = pgTable("cart_items", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id),
-  bookId: uuid("book_id").references(() => books.id),
+  userId: uuid("user_id").references(() => users.id,{onDelete: 'cascade'}).notNull(),
+  bookId: uuid("book_id").references(() => books.id,{onDelete: 'cascade'}).notNull(),
   quantity: integer("quantity").default(1),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -93,7 +93,7 @@ export const cartItems = pgTable("cart_items", {
 
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id).notNull(),
+  userId: uuid("user_id").references(() => users.id,{onDelete: 'cascade'}).notNull(),
   status: varchar("status", { length: 20 }).default("PENDING").notNull(),
   totalAmount: numeric("total_amount", {precision: 10,scale: 2}).notNull(),
   paymentStatus: varchar("payment_status", { length: 20 }).default("UNPAID").notNull(),

@@ -8,10 +8,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useSession } from 'next-auth/react';
+import { Badge } from '../ui/badge';
+import { useCart } from '@/hooks/useCart';
 
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
   const { status } = useSession();
+
+  const { getTotalItems } = useCart();
+  const totalItems = getTotalItems();
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -90,9 +95,15 @@ export default function Navbar() {
           </Button>
 
           {/* Cart */}
-          <Button size='icon' variant='ghost' asChild>
+          <Button size='icon' variant='ghost' asChild className='relative'>
             <Link href='/cart'>
               <ShoppingCart size={20} />
+
+              {totalItems > 0 && (
+                <Badge className='absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full px-1'>
+                  {totalItems}
+                </Badge>
+              )}
             </Link>
           </Button>
 
