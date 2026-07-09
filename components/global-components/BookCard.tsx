@@ -6,9 +6,23 @@ import { Button } from '../ui/button';
 import { BookType } from '@/types/book.type';
 import Link from 'next/link';
 import { useCart } from '@/hooks/useCart';
+import { createCart } from '@/http/api';
 
 export default function BookCard({ book }: { book: BookType }) {
-  const { addToCart } = useCart();
+  const { addToCart, removeFromCart } = useCart();
+
+
+
+  const addToCartHandler = async () => {
+    addToCart(book);
+
+    try {
+      await createCart(book.id);
+    } catch (error) {
+      removeFromCart(book.id);
+      console.log('Error adding book to cart:', error);
+    }
+  };
 
   return (
     <div className='group'>
@@ -56,7 +70,11 @@ export default function BookCard({ book }: { book: BookType }) {
             ${book.discountPrice}
           </span>
 
-          <Button size='sm' className='ml-auto' onClick={() => addToCart(book)}>
+          <Button
+            size='sm'
+            className='ml-auto'
+            onClick={addToCartHandler}
+          >
             Add to Cart
           </Button>
         </div>

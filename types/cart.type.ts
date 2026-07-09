@@ -3,8 +3,16 @@
 import { BookType } from "./book.type";
 
 export interface CartItem {
+  id: string;
   book: BookType;
   quantity: number;
+  title: string;
+  coverImage: string;
+  price: number;
+  slug: string;
+  averageRating: number;
+  discountPrice: number;
+  author: string; 
 }
 
 export interface CartStore {

@@ -84,9 +84,9 @@ export const inventory = pgTable("inventory", {
 
 export const cartItems = pgTable("cart_items", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id,{onDelete: 'cascade'}).notNull(),
+  // userId: uuid("user_id").references(() => users.id,{onDelete: 'cascade'}).notNull(),
   bookId: uuid("book_id").references(() => books.id,{onDelete: 'cascade'}).notNull(),
-  quantity: integer("quantity").default(1),
+  quantity: integer("quantity").default(1).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

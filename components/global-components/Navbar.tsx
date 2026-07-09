@@ -13,8 +13,8 @@ import { useCart } from '@/hooks/useCart';
 
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
+  const [search, setSearch] = useState('');
   const { status } = useSession();
-
   const { getTotalItems } = useCart();
   const totalItems = getTotalItems();
 
@@ -61,6 +61,8 @@ export default function Navbar() {
               <div className='relative pl-10'>
                 <Input
                   autoFocus
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder='Search books...'
                   className='rounded-full pr-10'
                 />
