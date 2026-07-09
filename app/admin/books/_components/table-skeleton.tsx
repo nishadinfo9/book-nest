@@ -15,7 +15,7 @@ const ProductTableSkeleton = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({ length: 6 }).map((_, i) => (
               <TableHead key={i}>
                 <Skeleton className="h-8 w-30" />
               </TableHead>
@@ -24,9 +24,9 @@ const ProductTableSkeleton = () => {
         </TableHeader>
 
         <TableBody>
-          {Array.from({ length: 8 }).map((_, row) => (
+          {Array.from({ length: 7 }).map((_, row) => (
             <TableRow key={row}>
-              {Array.from({ length: 3 }).map((_, col) => (
+              {Array.from({ length: 6 }).map((_, col) => (
                 <TableCell key={col}>
                   <Skeleton className="h-8 w-full" />
                 </TableCell>

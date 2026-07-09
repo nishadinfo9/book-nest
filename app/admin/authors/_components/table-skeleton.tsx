@@ -24,7 +24,7 @@ const AuthorTableSkeleton = () => {
         </TableHeader>
 
         <TableBody>
-          {Array.from({ length: 8 }).map((_, row) => (
+          {Array.from({ length: 7 }).map((_, row) => (
             <TableRow key={row}>
               {Array.from({ length: 3 }).map((_, col) => (
                 <TableCell key={col}>
