@@ -5,9 +5,9 @@ import CartSummary from './_components/CartSummary';
 import { useQuery } from '@tanstack/react-query';
 import { getCart } from '@/http/api';
 import { CartType } from '@/types/cart.type';
+import BookCardSkeleton from '@/components/global-components/BookCardSkeleton';
 
 export default function CartPage() {
-
   const { data: cart = [], isLoading } = useQuery({
     queryKey: ['cart'],
     queryFn: () => getCart(),
@@ -29,9 +29,12 @@ export default function CartPage() {
     <section className='mx-auto max-w-7xl px-6 py-10'>
       <div className='grid gap-8 lg:grid-cols-3'>
         <div className='space-y-5 lg:col-span-2'>
-          {cart.items.map((item: CartType) => (
-            <CartItem key={item.id} item={item} />
-          ))}
+        
+
+          {
+            cart?.items?.map((item: CartType) => (
+              <CartItem key={item.id} item={item} />
+            ))}
         </div>
 
         <CartSummary summary={cart.summary} />

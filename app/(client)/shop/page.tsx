@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getBooks } from '@/http/api';
 import { BookType } from '@/types/book.type';
 import BookCard from '@/components/global-components/BookCard';
+import BookCardSkeleton from '@/components/global-components/BookCardSkeleton';
 
 function Shop() {
   const {
@@ -24,9 +25,11 @@ function Shop() {
       </div>
 
       <div className='grid grid-cols-5 gap-6'>
-        {books?.map((book) => (
-          <BookCard key={book.id} book={book} />
-        ))}
+        {isLoading &&
+          Array.from({ length: 10 }).map((_, i) => <BookCardSkeleton key={i} />)}
+
+        {!isLoading &&
+          books?.map((book) => <BookCard key={book.id} book={book} />)}
       </div>
     </section>
   );
