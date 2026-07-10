@@ -90,30 +90,78 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const cart = await db
+    const items = await db
       .select({
         id: cartItems.id,
+        bookId: books.id,
         title: books.title,
-        quantity: cartItems.quantity,
-        coverImage: books.coverImage,
-        price: books.price,
         slug: books.slug,
+        coverImage: books.coverImage,
+        author: authors.name,
         averageRating: books.averageRating,
+        price: books.price,
         discountPrice: books.discountPrice,
-        author: authors.name, // Assuming you want to include the author's name
-
+        quantity: cartItems.quantity,
       })
       .from(cartItems)
       .leftJoin(books, eq(cartItems.bookId, books.id))
-      .leftJoin(authors, eq(books.authorId, authors.id)); 
-    return NextResponse.json( cart );
+      .leftJoin(authors, eq(books.authorId, authors.id));
+    // .where(eq(cartItems.userId, user.id)) // add authentication later
+
+    const formattedItems = items.map((item) => {
+      const unitPrice = item.price ?? item.price;
+      const subtotal = Number(unitPrice) * item.quantity;
+
+      return {
+        ...item,
+        subtotal,
+      };
+    });
+
+    const summary = formattedItems.reduce(
+      (acc, item) => {
+        const originalPrice = Number(item.price) * item.quantity;
+        const discountedPrice = item.subtotal;
+
+        acc.totalItems += 1;
+        acc.totalQuantity += item.quantity;
+        acc.subtotal += discountedPrice;
+        acc.discount += originalPrice - discountedPrice;
+
+        return acc;
+      },
+      {
+        totalItems: 0,
+        totalQuantity: 0,
+        subtotal: 0,
+        discount: 0,
+      },
+    );
+
+    // Business Rules
+    const shipping = summary.subtotal >= 1000 ? 0 : 80;
+    const tax = Math.round(summary.subtotal * 0.05); // 5%
+    const total = summary.subtotal + shipping + tax;
+
+    return NextResponse.json({
+      items: formattedItems,
+      summary: {
+        ...summary,
+        shipping,
+        tax,
+        total,
+      },
+    });
   } catch (error) {
     console.error(error);
+
     return NextResponse.json(
       {
         message: 'Internal Server Error',
       },
-      { status: 500 },
+      {
+        status: 500,
+      },
     );
   }
 }

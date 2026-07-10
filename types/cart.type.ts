@@ -2,7 +2,7 @@
 
 import { BookType } from "./book.type";
 
-export interface CartItem {
+export interface CartType {
   id: string;
   book: BookType;
   quantity: number;
@@ -16,7 +16,7 @@ export interface CartItem {
 }
 
 export interface CartStore {
-  cart: CartItem[];
+  cart: CartType[];
   addToCart: (book: BookType) => void;
   removeFromCart: (bookId: string) => void;
   increaseQuantity: (bookId: string) => void;

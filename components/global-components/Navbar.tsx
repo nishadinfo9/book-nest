@@ -10,13 +10,20 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useSession } from 'next-auth/react';
 import { Badge } from '../ui/badge';
 import { useCart } from '@/hooks/useCart';
+import { useQuery } from '@tanstack/react-query';
+import { getCart } from '@/http/api';
 
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
   const [search, setSearch] = useState('');
   const { status } = useSession();
-  const { getTotalItems } = useCart();
-  const totalItems = getTotalItems();
+
+  const { data: cart = [], isLoading } = useQuery({
+    queryKey: ['cart'],
+    queryFn: () => getCart(),
+  });
+
+  console.log('cart', cart)
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -101,9 +108,9 @@ export default function Navbar() {
             <Link href='/cart'>
               <ShoppingCart size={20} />
 
-              {totalItems > 0 && (
+              {cart?.summary?.totalQuantity > 0 && (
                 <Badge className='absolute -top-2 -right-2 flex h-5 min-w-5 items-center justify-center rounded-full px-1'>
-                  {totalItems}
+                  {cart.summary.totalQuantity}
                 </Badge>
               )}
             </Link>

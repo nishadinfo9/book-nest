@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { Minus, Plus, Trash2, Star } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { CartItem as CartItemType } from '@/types/cart.type';
+import { CartType as CartItemType } from '@/types/cart.type';
 import { useCart } from '@/hooks/useCart';
-import { removeCart,  updateCartQuantity } from '@/http/api';
+import { removeCart, updateCartQuantity } from '@/http/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function CartItem({ item }: Props) {
-  const { increaseQuantity, decreaseQuantity ,removeFromCart} = useCart();
+  const { increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
 
   const {
     author,
@@ -90,17 +90,7 @@ export default function CartItem({ item }: Props) {
             variant='ghost'
             size='icon'
             onClick={() => {
-              removeFromCart(id);
-
-              removeFromCartMutation.mutate(
-                id,
-
-                {
-                  onError: () => {
-                    increaseQuantity(id); // rollback
-                  },
-                },
-              );
+              removeFromCartMutation.mutate(id);
             }}
           >
             <Trash2 size={18} className='text-red-500' />
@@ -125,19 +115,10 @@ export default function CartItem({ item }: Props) {
               variant='ghost'
               size='icon'
               onClick={() => {
-                decreaseQuantity(id);
-
-                mutation.mutate(
-                  {
-                    cartId: id,
-                    quantity: quantity - 1,
-                  },
-                  {
-                    onError: () => {
-                      increaseQuantity(id); // rollback
-                    },
-                  },
-                );
+                mutation.mutate({
+                  cartId: id,
+                  quantity: quantity - 1,
+                });
               }}
             >
               <Minus size={16} />
@@ -149,19 +130,10 @@ export default function CartItem({ item }: Props) {
               variant='ghost'
               size='icon'
               onClick={() => {
-                increaseQuantity(id);
-
-                mutation.mutate(
-                  {
-                    cartId: id,
-                    quantity: quantity + 1,
-                  },
-                  {
-                    onError: () => {
-                      decreaseQuantity(id); // rollback
-                    },
-                  },
-                );
+                mutation.mutate({
+                  cartId: id,
+                  quantity: quantity + 1,
+                });
               }}
             >
               <Plus size={16} />

@@ -3,10 +3,9 @@
 import { BookType } from '@/types/book.type';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Star } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
+import CartButton from '@/components/global-components/CartButton';
 
 export default function BookInfo({ book }: { book: BookType }) {
-    const { addToCart } = useCart();
     
   return (
     <div>
@@ -35,10 +34,10 @@ export default function BookInfo({ book }: { book: BookType }) {
       <p className='text-muted-foreground mt-8 leading-8'>{book.description}</p>
 
       <div className='mt-10 flex gap-4'>
-        <Button size='lg'>
-          <ShoppingCart className='mr-2 h-5 w-5' onClick={() => addToCart(book)}/>
+        <CartButton size='lg' bookId={book.id}>
+          <ShoppingCart className='mr-2 h-5 w-5' />
           Add To Cart
-        </Button>
+        </CartButton>
 
         <Button variant='outline' size='lg'>
           Buy Now

@@ -5,24 +5,11 @@ import { Heart, Star } from 'lucide-react';
 import { Button } from '../ui/button';
 import { BookType } from '@/types/book.type';
 import Link from 'next/link';
-import { useCart } from '@/hooks/useCart';
-import { createCart } from '@/http/api';
+
+import CartButton from './CartButton';
 
 export default function BookCard({ book }: { book: BookType }) {
-  const { addToCart, removeFromCart } = useCart();
 
-
-
-  const addToCartHandler = async () => {
-    addToCart(book);
-
-    try {
-      await createCart(book.id);
-    } catch (error) {
-      removeFromCart(book.id);
-      console.log('Error adding book to cart:', error);
-    }
-  };
 
   return (
     <div className='group'>
@@ -70,13 +57,9 @@ export default function BookCard({ book }: { book: BookType }) {
             ${book.discountPrice}
           </span>
 
-          <Button
-            size='sm'
-            className='ml-auto'
-            onClick={addToCartHandler}
-          >
+          <CartButton size='sm' className='ml-auto' bookId={book.id}>
             Add to Cart
-          </Button>
+          </CartButton>
         </div>
       </div>
     </div>

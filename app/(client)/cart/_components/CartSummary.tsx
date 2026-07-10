@@ -1,24 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useCart } from '@/hooks/useCart';
 
-export default function CartSummary() {
-  const { cart } = useCart();
+interface summaryProps {
+  totalItems: number;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  total: number;
+}
 
-  const subtotal = cart.reduce(
-    (total, item) => total + item.book.price * item.quantity,
-    0,
-  );
-
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-
-  const shipping = subtotal > 100 ? 0 : 5;
-  const tax = subtotal * 0.05;
-  const total = subtotal + shipping + tax;
+export default function CartSummary({ summary }: { summary: summaryProps }) {
+  const { totalItems, tax, total, shipping, subtotal } = summary;
 
   return (
     <div className='sticky top-24 rounded-xl border bg-white p-6'>
