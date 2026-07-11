@@ -13,3 +13,16 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface RegisterUserType {
+  name: string;
+  email: string;
+  password: string
+  confirmPassword: string
+}
+
+export interface LoggedInUserType {
+  email: string;
+  password: string
+
+}

@@ -137,12 +137,6 @@ export const authors = pgTable("authors", {
 export const wishlists = pgTable("wishlists", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const wishlistItems = pgTable("wishlist_items", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  wishlistId: uuid("wishlist_id").references(() => wishlists.id).notNull(),
   bookId: uuid("book_id").references(() => books.id).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

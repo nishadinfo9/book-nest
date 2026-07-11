@@ -1,6 +1,17 @@
 import { FormValue } from '@/app/admin/inventory/_components/inventory-form';
 import { api } from './client';
 import { AuthorFormValue } from '@/app/admin/authors/_components/authors-form';
+import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
+
+export const registerUser = async (data: RegisterUserType) => {
+  const response = await api.post('/signup', data);
+  return response.data;
+};
+
+export const loggedInUser = async (data: LoggedInUserType) => {
+  const response = await api.post('/login', data);
+  return response.data;
+};
 
 export const getBooks = async () => {
   const response = await api.get('/books');
@@ -87,14 +98,14 @@ export const createCart = async (id: string) => {
 };
 
 export const getCart = async () => {
-  const { data } = await api.get("/carts");
+  const { data } = await api.get('/carts');
   return data;
 };
 
 export const removeCart = async (id: string) => {
   const { data } = await api.delete(`/carts/${id}`);
   return data;
-}
+};
 
 export const updateCartQuantity = async (id: string, quantity: number) => {
   const { data } = await api.patch(`/carts/${id}`, {

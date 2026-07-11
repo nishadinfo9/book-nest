@@ -57,6 +57,13 @@
       "when": 1783615647928,
       "tag": "0007_dizzy_lifeguard",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1783706801378,
+      "tag": "0008_chemical_prism",
+      "breakpoints": true
     }
   ]
 }

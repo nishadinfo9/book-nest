@@ -6,24 +6,32 @@ import { Search, Heart, ShoppingCart, X } from 'lucide-react';
 import Logo from './logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useSession } from 'next-auth/react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { signOut, useSession } from 'next-auth/react';
 import { Badge } from '../ui/badge';
-import { useCart } from '@/hooks/useCart';
 import { useQuery } from '@tanstack/react-query';
 import { getCart } from '@/http/api';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 export default function Navbar() {
   const [openSearch, setOpenSearch] = useState(false);
   const [search, setSearch] = useState('');
-  const { status } = useSession();
+  const { status, data } = useSession();
+
+  console.log('data', data);
 
   const { data: cart = [], isLoading } = useQuery({
     queryKey: ['cart'],
     queryFn: () => getCart(),
   });
 
-  console.log('cart', cart)
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -31,6 +39,16 @@ export default function Navbar() {
     { name: 'E-book', path: '/e-book' },
     { name: 'About', path: '/about' },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await signOut({
+        callbackUrl: '/login',
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <header className='w-full border-b border-gray-200'>
@@ -117,9 +135,42 @@ export default function Navbar() {
           </Button>
 
           {/* Avatar */}
-          <Avatar className='cursor-pointer'>
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
+          {status === 'authenticated' && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant='secondary'
+                  size='icon'
+                  className='rounded-full'
+                >
+                  <Avatar className='cursor-pointer'>
+                    <AvatarImage
+                      src={data?.user?.image}
+                      alt={data?.user?.name ?? 'User'}
+                    />
+                    <AvatarFallback>
+                      {' '}
+                      {data?.user?.name?.charAt(0).toUpperCase() ?? 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  <span className='sr-only'>Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end'>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href={'/account'}>Account</Link>
+                </DropdownMenuItem>
+                {data && (
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Logout
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </nav>
     </header>

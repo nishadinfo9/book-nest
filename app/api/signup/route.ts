@@ -5,10 +5,7 @@ import { eq } from "drizzle-orm";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
     const { name, email, provider, externalId, } = body;
-
-    
 
     if (!name || !email) {
       return Response.json(
@@ -32,7 +29,7 @@ export async function POST(req: Request) {
     }
 
     // create user
-    const newUser = await db.insert(users).values({
+    await db.insert(users).values({
       name,
       email,
       provider: provider || "credentials",

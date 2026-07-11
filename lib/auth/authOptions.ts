@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
         if (!user) {
           throw new Error("User not found");
         }
-
+console.log('user', user)
 
         return {
           id: user.id,
