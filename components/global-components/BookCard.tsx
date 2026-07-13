@@ -1,15 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { Heart, Star } from 'lucide-react';
-import { Button } from '../ui/button';
+import {  Star } from 'lucide-react';
 import { BookType } from '@/types/book.type';
 import Link from 'next/link';
 
 import CartButton from './CartButton';
+import WishlistButton from './WishlistButton';
 
 export default function BookCard({ book }: { book: BookType }) {
-
 
   return (
     <div className='group'>
@@ -25,16 +24,7 @@ export default function BookCard({ book }: { book: BookType }) {
         </Link>
 
         {/* Wishlist */}
-        <Button
-          size='icon'
-          variant='secondary'
-          className='absolute top-2 left-2 z-10 h-8 w-8 rounded-full bg-white/90 shadow-sm backdrop-blur hover:bg-white'
-        >
-          <Heart
-            size={16}
-            className='text-gray-600 hover:fill-red-500 hover:text-red-500'
-          />
-        </Button>
+      <WishlistButton wishlisted={book?.wishlisted} bookId={book.id}/>
       </div>
 
       {/* Info */}

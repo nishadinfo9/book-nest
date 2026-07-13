@@ -16,7 +16,7 @@ import ReviewCard from "./_components/ReviewCard";
 export default function Page() {
   const { slug } = useParams();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["single-book", slug],
     queryFn: () => getSingleBook(slug as string),
   });
@@ -44,7 +44,7 @@ export default function Page() {
 
       <section className="grid lg:grid-cols-2 gap-12">
 
-        <BookGallery image={book.coverImage} />
+        <BookGallery book={book} />
 
         <BookInfo book={book} />
 

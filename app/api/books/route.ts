@@ -1,10 +1,15 @@
 import { db } from '@/lib/db/db';
-import { authors, books, categories, publishers } from '@/lib/db/schema';
+import {
+  authors,
+  books,
+  categories,
+  publishers,
+  wishlists,
+} from '@/lib/db/schema';
 import { uploadImageToCloudinary } from '@/lib/cloudinary/uploadImage';
 import { generateSlug } from '@/helpers/generateSlug';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { BookSchema } from '@/lib/validation';
-import { redis } from '@/lib/db/redis';
 
 export async function GET(request: Request) {
   try {
@@ -12,16 +17,6 @@ export async function GET(request: Request) {
 
     const limit = Number(searchParams.get('limit') ?? 10);
     const page = Number(searchParams.get('page') ?? 1);
-
-    const cacheKey = `books:page:${page}:limit:${limit}`;
-    const cachedBooks = await redis.get(cacheKey);
-
-    if (cachedBooks) {
-      console.log('✅ Cache Hit');
-      return Response.json(JSON.parse(cachedBooks), { status: 200 });
-    }
-
-    console.log('❌ Cache Miss');
 
     const allBooks = await db
       .select({
@@ -34,16 +29,16 @@ export async function GET(request: Request) {
         category: categories.name,
         publisher: publishers.name,
         author: authors.name,
+        wishlisted: sql<boolean>`${wishlists.id} IS NOT NULL`,
       })
       .from(books)
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
       .leftJoin(categories, eq(categories.id, books.categoryId))
       .leftJoin(authors, eq(authors.id, books.authorId))
+      .leftJoin(wishlists, eq(wishlists.bookId, books.id)) //check userId also
       .limit(limit)
       .offset((page - 1) * limit)
       .orderBy(desc(books.createdAt));
-
-    await redis.set(cacheKey, JSON.stringify(allBooks), 'EX', 300,);
 
     return Response.json(allBooks, { status: 200 });
   } catch (error) {
@@ -151,11 +146,6 @@ export async function POST(request: Request) {
       coverImage: coverImageUrl,
       status: 'PUBLISHED',
     });
-
-    const key = await redis.keys('book:*')
-    if (key.length > 0) {
-      await redis.del(...key);
-    }
 
     return Response.json(
       {

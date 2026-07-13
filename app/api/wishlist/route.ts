@@ -1,23 +1,34 @@
 import { db } from '@/lib/db/db';
-import { wishlists } from '@/lib/db/schema';
+import { users, wishlists } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
 
 export async function POST(request: Request) {
+  const session = await getServerSession();
+
+  if (!session) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, session.user.email))
+    .limit(1);
+
+  if (!user) {
+    return Response.json({ message: 'User not found' }, { status: 404 });
+  }
+
+  const { bookId } = await request.json();
+
+  if (!bookId) {
+    return Response.json({ message: 'Book ID is required' }, { status: 400 });
+  }
   try {
-    const session = await getServerSession();
-    if (!session?.user?.id) {
-      return Response.json({ message: 'Unauthorized' }, { status: 401 });
-    }
+    const userId = user.id;
 
-    const { bookId } = await request.json();
-    if (!bookId) {
-      return Response.json({ message: 'Book ID is required' }, { status: 400 });
-    }
-
-    const userId = session.user.id;
-
-    const wishlistItem = await db
+    const [wishlistItem] = await db
       .select()
       .from(wishlists)
       .where(and(eq(wishlists.bookId, bookId), eq(wishlists.userId, userId)))
@@ -50,6 +61,7 @@ export async function POST(request: Request) {
       {
         success: false,
         message: 'Internal Server Error',
+        error,
       },
       {
         status: 500,

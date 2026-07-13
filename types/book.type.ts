@@ -13,4 +13,5 @@ export interface BookType {
   averageRating?: number;
   author?: string;
   discountPrice?: number;
+  wishlisted: boolean
 }

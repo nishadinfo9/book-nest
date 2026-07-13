@@ -19,13 +19,14 @@ const ProductPage = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: products,
+    data: books,
     isLoading,
     isError,
   } = useQuery<BookType[]>({
     queryKey: ["books"],
     queryFn: getBooks,
   });
+
 
   const { mutate } = useMutation({
     mutationKey: ["delete-book"],
@@ -84,7 +85,7 @@ const ProductPage = () => {
       ) : (
         <DataTable
           columns={columns(handleDelete, handleEdit)}
-          data={products || []}
+          data={books || []}
         />
       )}
     </>

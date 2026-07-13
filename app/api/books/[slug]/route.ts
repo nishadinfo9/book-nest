@@ -1,6 +1,12 @@
-import { db } from "@/lib/db/db";
-import { authors, books, categories, publishers } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { db } from '@/lib/db/db';
+import {
+  authors,
+  books,
+  categories,
+  publishers,
+  wishlists,
+} from '@/lib/db/schema';
+import { eq, sql } from 'drizzle-orm';
 
 export async function GET(
   req: Request,
@@ -23,24 +29,26 @@ export async function GET(
         category: categories.name,
         publisher: publishers.name,
         author: authors.name,
+        wishlisted: sql<boolean>`${wishlists.id} IS NOT NULL`,
       })
       .from(books)
       .where(eq(books.slug, slug))
       .limit(1)
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
       .leftJoin(categories, eq(categories.id, books.categoryId))
-      .leftJoin(authors, eq(authors.id, books.authorId));
+      .leftJoin(authors, eq(authors.id, books.authorId))
+      .leftJoin(wishlists, eq(wishlists.bookId, books.id)); //check userId also
 
     if (!book.length) {
-      return Response.json({ error: "Book not found" }, { status: 404 });
+      return Response.json({ error: 'Book not found' }, { status: 404 });
     }
 
     return Response.json({
       data: book[0],
     });
   } catch (error) {
-    console.error("Book not found:", error);
-    return Response.json({ error: "Book not found" }, { status: 404 });
+    console.error('Book not found:', error);
+    return Response.json({ error: 'Book not found' }, { status: 404 });
   }
 }
 
@@ -59,19 +67,19 @@ export async function DELETE(
       });
 
     if (deletedBook.length === 0) {
-      return Response.json({ error: "Book not found" }, { status: 404 });
+      return Response.json({ error: 'Book not found' }, { status: 404 });
     }
 
     return Response.json(
       {
-        message: "Book deleted successfully",
+        message: 'Book deleted successfully',
         id: deletedBook[0].id,
       },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Delete book error:", error);
+    console.error('Delete book error:', error);
 
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

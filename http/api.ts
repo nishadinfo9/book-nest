@@ -114,3 +114,8 @@ export const updateCartQuantity = async (id: string, quantity: number) => {
 
   return data;
 };
+
+export const addWishlist = async (id: string) => {
+  const response = await api.post('/wishlist', { bookId: id });
+  return response.data;
+};
