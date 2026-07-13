@@ -119,3 +119,8 @@ export const addWishlist = async (id: string) => {
   const response = await api.post('/wishlist', { bookId: id });
   return response.data;
 };
+
+export const getMyWishlists = async () => {
+  const { data } = await api.get('/wishlist');
+  return data;
+};

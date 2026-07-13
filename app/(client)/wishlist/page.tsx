@@ -16,41 +16,51 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { useQuery } from '@tanstack/react-query';
+import { getMyWishlists } from '@/http/api';
+import { WishlistType } from '@/types/wishlist.type';
+import CartButton from '@/components/global-components/CartButton';
 
-const wishlist = [
-  {
-    id: 1,
-    title: 'Atomic Habits',
-    author: 'James Clear',
-    image: '/book-demo.jpg',
-    price: 550,
-    discountPrice: 450,
-    rating: 4.8,
-    slug: 'atomic-habits',
-  },
-  {
-    id: 2,
-    title: 'Deep Work',
-    author: 'Cal Newport',
-    image: '/book-demo.jpg',
-    price: 620,
-    discountPrice: 520,
-    rating: 4.7,
-    slug: 'deep-work',
-  },
-  {
-    id: 3,
-    title: 'The Psychology of Money',
-    author: 'Morgan Housel',
-    image: '/book-demo.jpg',
-    price: 700,
-    discountPrice: 620,
-    rating: 4.9,
-    slug: 'psychology-of-money',
-  },
-];
+// const wishlist = [
+//   {
+//     id: 1,
+//     title: 'Atomic Habits',
+//     author: 'James Clear',
+//     image: '/book-demo.jpg',
+//     price: 550,
+//     discountPrice: 450,
+//     rating: 4.8,
+//     slug: 'atomic-habits',
+//   },
+//   {
+//     id: 2,
+//     title: 'Deep Work',
+//     author: 'Cal Newport',
+//     image: '/book-demo.jpg',
+//     price: 620,
+//     discountPrice: 520,
+//     rating: 4.7,
+//     slug: 'deep-work',
+//   },
+//   {
+//     id: 3,
+//     title: 'The Psychology of Money',
+//     author: 'Morgan Housel',
+//     image: '/book-demo.jpg',
+//     price: 700,
+//     discountPrice: 620,
+//     rating: 4.9,
+//     slug: 'psychology-of-money',
+//   },
+// ];
 
 const WishList = () => {
+  const { data: wishlistData } = useQuery({
+    queryKey: ['my-wishlists'],
+    queryFn: getMyWishlists,
+  });
+
+  console.log('wishlist', wishlistData);
   return (
     <main className='mt-8 px-10'>
       {/* Header */}
@@ -59,12 +69,12 @@ const WishList = () => {
           <h1 className='text-3xl font-bold tracking-tight'>My Wishlist</h1>
 
           <p className='text-muted-foreground mt-1 text-sm'>
-            {wishlist.length} saved books
+            {wishlistData?.length} saved books
           </p>
         </div>
       </div>
 
-      {wishlist.length === 0 ? (
+      {!wishlistData ? (
         <div className='flex h-[60vh] flex-col items-center justify-center rounded-xl border border-dashed'>
           <Heart className='text-muted-foreground mb-4 h-12 w-12' />
 
@@ -80,7 +90,7 @@ const WishList = () => {
         </div>
       ) : (
         <div className='space-y-5'>
-          {wishlist.map((book) => (
+          {wishlistData.map((book: WishlistType) => (
             <div
               key={book.id}
               className='group bg-background flex gap-5 rounded-2xl border p-5 transition-all hover:shadow-md'
@@ -102,7 +112,7 @@ const WishList = () => {
                   <div className='flex items-start justify-between gap-4'>
                     <div className='min-w-0'>
                       <Link
-                        href={`/books/${book.slug}`}
+                        href={`/shop/${book.slug}`}
                         className='hover:text-primary line-clamp-2 text-xl font-semibold transition-colors'
                       >
                         {book.title}
@@ -157,13 +167,12 @@ const WishList = () => {
 
                   <div className='flex gap-3'>
                     <Button variant='outline' asChild>
-                      <Link href={`/books/${book.slug}`}>View Details</Link>
+                      <Link href={`/shop/${book.slug}`}>View Details</Link>
                     </Button>
 
-                    <Button>
-                      <ShoppingCart className='mr-2 h-4 w-4' />
+                    <CartButton size='sm' className='ml-auto' bookId={book.id}>
                       Add to Cart
-                    </Button>
+                    </CartButton>
                   </div>
                 </div>
               </div>

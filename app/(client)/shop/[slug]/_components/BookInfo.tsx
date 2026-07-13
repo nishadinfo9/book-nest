@@ -35,7 +35,6 @@ export default function BookInfo({ book }: { book: BookType }) {
 
       <div className='mt-10 flex gap-4'>
         <CartButton size='lg' bookId={book.id}>
-          <ShoppingCart className='mr-2 h-5 w-5' />
           Add To Cart
         </CartButton>
 

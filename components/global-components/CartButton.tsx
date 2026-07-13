@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { createCart } from '@/http/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ShoppingCart } from 'lucide-react';
 
 interface CartButtonProps {
   variant?:
@@ -43,6 +44,7 @@ const CartButton = ({
       className={className}
       onClick={  addToCartHandler}
     >
+      <ShoppingCart className='mr-1 h-4 w-4' />
       {children}
     </Button>
   );
