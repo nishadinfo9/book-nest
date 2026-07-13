@@ -21,46 +21,16 @@ import { getMyWishlists } from '@/http/api';
 import { WishlistType } from '@/types/wishlist.type';
 import CartButton from '@/components/global-components/CartButton';
 
-// const wishlist = [
-//   {
-//     id: 1,
-//     title: 'Atomic Habits',
-//     author: 'James Clear',
-//     image: '/book-demo.jpg',
-//     price: 550,
-//     discountPrice: 450,
-//     rating: 4.8,
-//     slug: 'atomic-habits',
-//   },
-//   {
-//     id: 2,
-//     title: 'Deep Work',
-//     author: 'Cal Newport',
-//     image: '/book-demo.jpg',
-//     price: 620,
-//     discountPrice: 520,
-//     rating: 4.7,
-//     slug: 'deep-work',
-//   },
-//   {
-//     id: 3,
-//     title: 'The Psychology of Money',
-//     author: 'Morgan Housel',
-//     image: '/book-demo.jpg',
-//     price: 700,
-//     discountPrice: 620,
-//     rating: 4.9,
-//     slug: 'psychology-of-money',
-//   },
-// ];
-
 const WishList = () => {
-  const { data: wishlistData } = useQuery({
+  const { data: wishlistData ,isLoading} = useQuery({
     queryKey: ['my-wishlists'],
     queryFn: getMyWishlists,
   });
 
-  console.log('wishlist', wishlistData);
+  if(isLoading){
+    return <div>loading...</div>
+  }
+
   return (
     <main className='mt-8 px-10'>
       {/* Header */}
