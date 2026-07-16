@@ -2,7 +2,7 @@ import { uploadImageToCloudinary } from '@/lib/cloudinary/uploadImage';
 import { db } from '@/lib/db/db';
 import { reviews, users } from '@/lib/db/schema';
 import { ReviewFormSchemaBackend } from '@/lib/validation/reviewSchema';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
 
 export async function POST(request: Request) {
@@ -77,5 +77,26 @@ export async function POST(request: Request) {
   } catch (error) {
     console.log('review creating error', error);
     return Response.json({ message: 'review creating error' }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const allReviews = await db
+      .select({
+        id: reviews.id,
+        comment: reviews.comment,
+        image: reviews.image,
+        avatar: users.image,
+        rating: reviews.rating,
+        user: users.name
+      })
+      .from(reviews)
+      .leftJoin(users, eq(reviews.userId,users.id ))
+      .orderBy(desc(reviews.createdAt));
+
+    return Response.json(allReviews, { status: 200 });
+  } catch (error) {
+    return Response.json({ message: 'review not found' }, { status: 404 });
   }
 }

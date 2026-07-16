@@ -64,6 +64,13 @@
       "when": 1783706801378,
       "tag": "0008_chemical_prism",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1784072916623,
+      "tag": "0009_famous_slyde",
+      "breakpoints": true
     }
   ]
 }

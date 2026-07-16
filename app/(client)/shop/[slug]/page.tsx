@@ -1,6 +1,6 @@
 "use client";
 
-import { getSingleBook } from "@/http/api";
+import { getReviews, getSingleBook } from "@/http/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
@@ -12,6 +12,7 @@ import BookDescription from "./_components/BookDescription";
 import BookMeta from "./_components/BookMeta";
 import ReviewForm from "./_components/ReviewForm";
 import ReviewCard from "./_components/ReviewCard";
+import { ReviewType } from "@/types/review.type";
 
 export default function Page() {
   const { slug } = useParams();
@@ -23,7 +24,14 @@ export default function Page() {
 
   const book = data?.data;
 
-  if (isLoading) {
+    const { data: reviews, isLoading:reviewLoading } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: () => getReviews(),
+  });
+
+  console.log('reviews', reviews)
+
+  if (isLoading ) {
     return (
       <div className="container py-10">
         <Skeleton className="h-[550px] w-full rounded-xl" />
@@ -62,9 +70,12 @@ export default function Page() {
 
         <div className="space-y-6">
 
-          <ReviewCard />
+          {
+            reviews.map((item: ReviewType)=>(
+              <ReviewCard key={item.id} item={item}/>
+            ))
+          }
 
-          <ReviewCard />
 
         </div>
 

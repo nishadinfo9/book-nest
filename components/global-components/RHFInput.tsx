@@ -1,21 +1,21 @@
-import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Field, FieldError, FieldLabel } from '../ui/field';
-import { Input } from '../ui/input';
-import { ComponentProps, memo } from 'react';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 
-interface RHFInputProps<T extends FieldValues> extends ComponentProps<
-  typeof Input
-> {
-  control: Control<T>;
+type RHFInputProps<T extends FieldValues> = {
   name: Path<T>;
+  control: Control<T>;
   label: string;
-}
+  type?: React.HTMLInputTypeAttribute;
+  placeholder?: string;
+};
 
 const RHFInput = <T extends FieldValues>({
-  control,
   name,
+  control,
   label,
-  ...props
+  type = 'text',
+  placeholder,
 }: RHFInputProps<T>) => {
   return (
     <Controller
@@ -23,13 +23,31 @@ const RHFInput = <T extends FieldValues>({
       control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel>{label}</FieldLabel>
+
           <Input
-            {...field}
-            id={name}
-            aria-invalid={fieldState.invalid}
-            autoComplete={name}
-            {...props}
+            type={type}
+            placeholder={placeholder}
+            {...(type === 'file'
+              ? {
+                  name: field.name,
+                  ref: field.ref,
+                  onBlur: field.onBlur,
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.onChange(e.target.files?.[0] ?? null),
+                }
+              : type === 'number'
+                ? {
+                    ...field,
+                    value: field.value ?? '',
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                      field.onChange(
+                        e.target.value === ''
+                          ? undefined
+                          : Number(e.target.value),
+                      ),
+                  }
+                : field)}
           />
 
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

@@ -77,17 +77,6 @@ export async function POST(request: Request) {
       authorId,
       language,
     });
-    console.log({
-      title,
-      isbn13,
-      price,
-      discountPrice,
-      description,
-      categoryId,
-      publisherId,
-      authorId,
-      language,
-    });
 
     if (!validation.success) {
       return Response.json(

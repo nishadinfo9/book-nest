@@ -124,3 +124,17 @@ export const getMyWishlists = async () => {
   const { data } = await api.get('/wishlist');
   return data;
 };
+
+export const createReview = async (data: FormData) => {
+  const response = await api.post('/reviews', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+export const getReviews = async () => {
+  const { data } = await api.get('/reviews');
+  return data;
+};

@@ -115,8 +115,9 @@ export const reviews = pgTable("reviews", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id).notNull(),
   bookId: uuid("book_id").references(() => books.id).notNull(),
-  rating: integer("rating").notNull().notNull(),
-  comment: text("comment"),
+  rating: integer("rating").notNull(),
+  comment: text("comment").notNull(),
+  image: varchar("image", { length: 500 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
