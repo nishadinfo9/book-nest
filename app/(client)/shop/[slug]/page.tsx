@@ -70,7 +70,7 @@ export default function Page() {
 
       </section>
 
-      <ReviewForm />
+      <ReviewForm bookId={book.id}/>
 
     </main>
   );
