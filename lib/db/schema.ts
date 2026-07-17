@@ -21,6 +21,7 @@ export const users = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   email: varchar("email", { length: 255 }).unique().notNull(),
+  password: varchar("password", { length: 255 }).notNull(),
   provider: varchar("provider", { length: 20 }),
   externalId: varchar("external_id", { length: 100 }),
   image: text("image"),
@@ -99,6 +100,7 @@ export const orders = pgTable("orders", {
   paymentStatus: varchar("payment_status", { length: 20 }).default("UNPAID").notNull(),
   paymentMethod: varchar("payment_method", { length: 20 }),
   shippingAddress: text("shipping_address"),
+  notes: varchar("notes", { length: 100 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
