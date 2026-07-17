@@ -8,7 +8,6 @@ import { getServerSession } from 'next-auth';
 
 export async function POST(request: Request) {
   const session = await getServerSession();
-  console.log('session', session);
 
   if (!session?.user.email) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
@@ -26,7 +25,6 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    console.log('step 1');
 
     const parsed = CartSchema.safeParse(body);
 
@@ -40,8 +38,6 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log('step 2');
-
     const { bookId } = parsed.data;
 
     // Check book exists
@@ -50,10 +46,6 @@ export async function POST(request: Request) {
     if (!book) {
       return NextResponse.json({ message: 'Book not found' }, { status: 404 });
     }
-    console.log('book', book);
-    console.log('bookId', bookId);
-
-    console.log('step 3');
 
     // Check existing cart item
     const [existing] = await db
@@ -61,7 +53,6 @@ export async function POST(request: Request) {
       .from(cartItems)
       .where(and(eq(cartItems.bookId, bookId), eq(cartItems.userId, user.id)));
 
-    console.log('step 4');
 
     if (existing) {
       await db
@@ -81,15 +72,12 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log('step 6');
-
     await db.insert(cartItems).values({
       bookId,
       quantity: 1,
       userId: user.id,
     });
 
-    console.log('step 7');
 
     return NextResponse.json(
       {
