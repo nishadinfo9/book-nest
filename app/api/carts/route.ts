@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 
 export async function POST(request: Request) {
   const session = await getServerSession();
+  console.log('session', session);
 
   if (!session?.user.email) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
@@ -49,6 +50,8 @@ export async function POST(request: Request) {
     if (!book) {
       return NextResponse.json({ message: 'Book not found' }, { status: 404 });
     }
+    console.log('book', book);
+    console.log('bookId', bookId);
 
     console.log('step 3');
 
@@ -56,7 +59,7 @@ export async function POST(request: Request) {
     const [existing] = await db
       .select()
       .from(cartItems)
-      .where(and(eq(cartItems.bookId, bookId)));
+      .where(and(eq(cartItems.bookId, bookId), eq(cartItems.userId, user.id)));
 
     console.log('step 4');
 
@@ -107,6 +110,22 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
+  const session = await getServerSession();
+
+  if (!session?.user.email) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, session.user.email))
+    .limit(1);
+
+  if (!user) {
+    return Response.json({ message: 'User not found' }, { status: 404 });
+  }
+
   try {
     const items = await db
       .select({
@@ -124,7 +143,7 @@ export async function GET() {
       .from(cartItems)
       .leftJoin(books, eq(cartItems.bookId, books.id))
       .leftJoin(authors, eq(books.authorId, authors.id))
-      .where(eq(cartItems.userId, users.id));
+      .where(eq(cartItems.userId, user.id));
 
     const formattedItems = items.map((item) => {
       const unitPrice = item.price ?? item.price;
