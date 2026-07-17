@@ -1,9 +1,10 @@
-import { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "../db/db";
-import { users } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { db } from '../db/db';
+import { users } from '../db/schema';
+import { eq } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,18 +13,15 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
+      id: 'credentials',
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email",  },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-         console.log("authorize called:", credentials);
-
         if (!credentials?.email) return null;
 
-        // 🔍 1. find user in DB
         const currentUser = await db
           .select()
           .from(users)
@@ -31,11 +29,18 @@ export const authOptions: NextAuthOptions = {
           .limit(1);
 
         const user = currentUser[0];
-
         if (!user) {
-          throw new Error("User not found");
+          throw new Error('User not found');
         }
-console.log('user', user)
+
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials.password,
+          user.password,
+        );
+        
+        if (!isPasswordCorrect) {
+          throw new Error('Incorrect password');
+        }
 
         return {
           id: user.id,
@@ -45,9 +50,8 @@ console.log('user', user)
         };
       },
     }),
-    
   ],
-   callbacks: {
+  callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -65,13 +69,12 @@ console.log('user', user)
     },
   },
 
-
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
 
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
 
   secret: process.env.NEXTAUTH_SECRET,
