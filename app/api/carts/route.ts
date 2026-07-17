@@ -1,11 +1,28 @@
 import { NextResponse } from 'next/server';
 import { eq, and } from 'drizzle-orm';
 import { db } from '@/lib/db/db';
-import { authors, books } from '@/lib/db/schema';
+import { authors, books, users } from '@/lib/db/schema';
 import { cartItems } from '@/lib/db/schema';
 import { CartSchema } from '@/lib/validation/cartSchema';
+import { getServerSession } from 'next-auth';
 
 export async function POST(request: Request) {
+  const session = await getServerSession();
+
+  if (!session?.user.email) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, session.user.email))
+    .limit(1);
+
+  if (!user) {
+    return Response.json({ message: 'User not found' }, { status: 404 });
+  }
+
   try {
     const body = await request.json();
     console.log('step 1');
@@ -66,6 +83,7 @@ export async function POST(request: Request) {
     await db.insert(cartItems).values({
       bookId,
       quantity: 1,
+      userId: user.id,
     });
 
     console.log('step 7');
@@ -105,8 +123,8 @@ export async function GET() {
       })
       .from(cartItems)
       .leftJoin(books, eq(cartItems.bookId, books.id))
-      .leftJoin(authors, eq(books.authorId, authors.id));
-    // .where(eq(cartItems.userId, user.id)) // add authentication later
+      .leftJoin(authors, eq(books.authorId, authors.id))
+      .where(eq(cartItems.userId, users.id));
 
     const formattedItems = items.map((item) => {
       const unitPrice = item.price ?? item.price;
