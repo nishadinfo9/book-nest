@@ -1,37 +1,44 @@
 import { db } from "@/lib/db/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import bcrypt from 'bcryptjs'
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, provider, externalId, } = body;
+    const { name, email, provider, externalId,password } = body;
 
-    if (!name || !email) {
+
+    if (!name || !email || !password) {
       return Response.json(
         { error: "Name and email are required" },
         { status: 400 }
       );
     }
 
+
     // check duplicate user
-    const existingUser = await db
+    const [existingUser] = await db
       .select()
       .from(users)
       .where(eq(users.email, email))
       .limit(1);
 
-    if (existingUser.length > 0) {
+
+    if (existingUser) {
       return Response.json(
         { error: "User already exists" },
         { status: 409 }
       );
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     // create user
     await db.insert(users).values({
       name,
       email,
+      password: hashedPassword,
       provider: provider || "credentials",
       externalId: externalId || null,
       role: "CUSTOMER",
