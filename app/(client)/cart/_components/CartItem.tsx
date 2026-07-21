@@ -6,7 +6,6 @@ import { Minus, Plus, Trash2, Star } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { CartType as CartItemType } from '@/types/cart.type';
-import { useCart } from '@/hooks/useCart';
 import { removeCart, updateCartQuantity } from '@/http/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -15,7 +14,6 @@ interface Props {
 }
 
 export default function CartItem({ item }: Props) {
-  const { increaseQuantity, decreaseQuantity, removeFromCart } = useCart();
 
   const {
     author,

@@ -22,13 +22,12 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         if (!credentials?.email) return null;
 
-        const currentUser = await db
+        const [user] = await db
           .select()
           .from(users)
           .where(eq(users.email, credentials.email))
           .limit(1);
 
-        const user = currentUser[0];
         if (!user) {
           throw new Error('User not found');
         }
@@ -79,3 +78,5 @@ export const authOptions: NextAuthOptions = {
 
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+

@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs'
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, provider, externalId,password } = body;
+    const { name, email, provider, externalId, password } = body;
 
 
     if (!name || !email || !password) {

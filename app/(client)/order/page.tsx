@@ -1,9 +1,19 @@
-import React from 'react'
+'use client'
+
+import React from 'react';
+import CheckoutForm from './_components/CheckoutForm';
+import { useParams } from 'next/navigation';
 
 const OrderPage = () => {
-  return (
-    <div>OrderPage</div>
-  )
-}
+  const  bookId  = useParams();
+  console.log(bookId)
 
-export default OrderPage
+  return (
+    <div>
+      OrderPage
+      <CheckoutForm bookId={bookId} />
+    </div>
+  );
+};
+
+export default OrderPage;

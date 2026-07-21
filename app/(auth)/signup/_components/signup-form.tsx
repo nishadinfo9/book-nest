@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
-import Link from 'next/link';
 import { RegisterUserType } from '@/types/user.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema } from '@/lib/validation';
@@ -19,6 +18,7 @@ import RHFInput from '@/components/global-components/RHFInput';
 import { registerUser } from '@/http/api';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 
 export function SignupForm({
   className,
@@ -111,7 +111,7 @@ export function SignupForm({
                 </Button>
                 <FieldDescription className='text-center'>
                   Already have an account?{' '}
-                  <Link className='font-medium hover:underline' href='/login'>
+                  <Link  href='/login' className='font-medium hover:underline'>
                     Log in
                   </Link>
                 </FieldDescription>

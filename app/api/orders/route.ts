@@ -1,4 +1,4 @@
-import { db } from '@/lib/db/db';
+import { db } from "@/lib/db/db";
 import {
   books,
   cartItems,
@@ -6,107 +6,201 @@ import {
   orderItems,
   orders,
   users,
-} from '@/lib/db/schema';
-import { and, eq } from 'drizzle-orm';
-import { getServerSession } from 'next-auth';
+} from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
+
+const storeId = process.env.STORE_ID!;
+const storePassword = process.env.SSL_API_SECRET!;
 
 export async function POST(request: Request) {
-  const session = await getServerSession();
+  try {
+    const session = await getServerSession();
 
-  if (!session?.user.email) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 });
-  }
+    if (!session?.user?.email) {
+      return Response.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
-  const [existUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, session.user.email))
-    .limit(1);
 
-  if (!existUser) {
-    return Response.json({ message: 'User not found' }, { status: 404 });
-  }
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, session.user.email))
+      .limit(1);
 
-  const { paymentMethod, shippingAddress } = await request.json();
+    if (!user) {
+      return Response.json(
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
 
-      const carts = await db
+
+
+
+    const {  shippingAddress } = await request.json();
+
+    const carts = await db
       .select()
       .from(cartItems)
       .innerJoin(books, eq(cartItems.bookId, books.id))
       .innerJoin(inventory, eq(inventory.bookId, books.id))
-      .where(eq(cartItems.userId, existUser.id))
+      .where(eq(cartItems.userId, user.id));
+
+
 
     if (carts.length === 0) {
-      return Response.json({ message: 'Cart is empty' }, { status: 404 });
-    }
-
-  await db.transaction(async (tx) => {
-
-
-    for (const items of carts) {
-      if (!items.books) {
-        return Response.json('books not found', { status: 404 });
-      }
-      if (!items.inventory) {
-        return Response.json('inventory not found', { status: 404 });
-      }
-
-      if (items.inventory.availableStock < items.cart_items.quantity) {
-        return Response.json('Not enough stock', { status: 404 });
-      }
-    }
-
-    const total = carts.reduce((sum, item) => {
-      return sum + Number(item.books.price) * Number(item.cart_items.quantity);
-    }, 0);
-
-    const [newOrder] = await tx
-      .insert(orders)
-      .values({
-        userId: existUser.id,
-        totalAmount: String(total),
-        paymentMethod,
-        shippingAddress,
-      })
-      .returning();
-
-    if (!newOrder) {
-      return Response.json({ message: 'order not created' }, { status: 401 });
-    }
-
-    const newOrderItem = await tx.insert(orderItems).values(
-      carts.map((item) => ({
-        orderId: newOrder.id,
-        bookId: item.books.id,
-        quantity: item.cart_items.quantity,
-        price: item.books.price,
-      })),
-    );
-
-    if (newOrderItem.length === 0) {
       return Response.json(
-        { message: 'order-items not created' },
-        { status: 401 },
+        { success: false, message: "Cart is empty" },
+        { status: 404 }
       );
     }
 
+
+
+
+    // Validate stock
     for (const item of carts) {
-      await tx
-        .update(inventory)
-        .set({
-          soldStock: item.inventory.soldStock + item.cart_items.quantity,
-          availableStock:
-            item.inventory.availableStock - item.cart_items.quantity,
-        })
-        .where(eq(inventory.bookId, item.books.id))
+      if (item.inventory.availableStock < item.cart_items.quantity) {
+        return Response.json(
+          {
+            success: false,
+            message: `${item.books.title} is out of stock.`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
-    await tx.delete(cartItems).where(and(eq(cartItems.userId, existUser.id)));
-    // add payment
-  });
 
-  return Response.json(
-    { message: 'order created successfully' },
-    { status: 201 },
-  );
+
+
+    const total = carts.reduce(
+      (sum, item) =>
+        sum + Number(item.books.price) * item.cart_items.quantity,
+      0
+    );
+
+    let order: typeof orders.$inferSelect | undefined;
+
+    await db.transaction(async (tx) => {
+      const [newOrder] = await tx
+        .insert(orders)
+        .values({
+          userId: user.id,
+          totalAmount: String(total),
+          shippingAddress,
+          status: "PENDING",
+        })
+        .returning();
+
+      if (!newOrder) {
+        throw new Error("Failed to create order.");
+      }
+
+
+
+
+      order = newOrder;
+
+      await tx.insert(orderItems).values(
+        carts.map((item) => ({
+          orderId: newOrder.id,
+          bookId: item.books.id,
+          quantity: item.cart_items.quantity,
+          price: item.books.price,
+        }))
+      );
+    });
+
+
+
+
+    const tranId = `ORD-${order!.id}-${Date.now()}`;
+
+    await db
+      .update(orders)
+      .set({
+        transactionId: tranId,
+      })
+      .where(eq(orders.id, order!.id));
+
+    const paymentData = {
+      store_id: storeId,
+      store_passwd: storePassword,
+
+      total_amount: total.toString(),
+      currency: "BDT",
+      tran_id: tranId,
+
+      success_url: `${process.env.NEXTAUTH_URL}/api/payment/success`,
+      fail_url: `${process.env.NEXTAUTH_URL}/api/payment/fail`,
+      cancel_url: `${process.env.NEXTAUTH_URL}/api/payment/cancel`,
+      ipn_url: `${process.env.NEXTAUTH_URL}/api/payment/ipn`,
+
+      shipping_method: "NO",
+
+      product_name: "Book Order",
+      product_category: "Books",
+      product_profile: "general",
+
+      cus_name: user.name ?? "Customer",
+      cus_email: user.email,
+      cus_add1: shippingAddress,
+      cus_city: "Dhaka",
+      cus_country: "Bangladesh",
+      cus_phone: "01700000000",
+    };
+
+
+    const response = await fetch(
+      "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(paymentData),
+      }
+    );
+
+    const apiResponse = await response.json();
+
+    if (apiResponse.status === "SUCCESS") {
+      console.log('apiResponse', apiResponse)
+      return Response.json({
+        success: true,
+        gatewayUrl: apiResponse.GatewayPageURL,
+      });
+    }
+
+    return Response.json(
+      {
+        success: false,
+        message: apiResponse.failedreason,
+      },
+      {
+        status: 400,
+      }
+    );
+
+
+
+  } catch (error) {
+    console.error(error);
+
+    return Response.json(
+      {
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Internal Server Error",
+      },
+      { status: 500 }
+    );
+  }
 }

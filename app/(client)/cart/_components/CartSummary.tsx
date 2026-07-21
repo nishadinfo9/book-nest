@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import CheckoutButton from './CheckoutButton';
 
 interface summaryProps {
   totalItems: number;
@@ -55,9 +56,7 @@ export default function CartSummary({ summary }: { summary: summaryProps }) {
         <span>${total.toFixed(2)}</span>
       </div>
 
-      <Button className='mt-6 w-full' size='lg'>
-        Proceed to Checkout
-      </Button>
+      <CheckoutButton>Proceed to Checkout</CheckoutButton>
 
       <Button variant='outline' className='mt-3 w-full' asChild>
         <Link href='/shop'>Continue Shopping</Link>

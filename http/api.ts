@@ -2,6 +2,7 @@ import { FormValue } from '@/app/admin/inventory/_components/inventory-form';
 import { api } from './client';
 import { AuthorFormValue } from '@/app/admin/authors/_components/authors-form';
 import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
+import { OrdersInput } from '@/lib/validation/orderSchema';
 
 export const registerUser = async (data: RegisterUserType) => {
   const response = await api.post('/signup', data);
@@ -137,4 +138,9 @@ export const createReview = async (data: FormData) => {
 export const getReviews = async () => {
   const { data } = await api.get('/reviews');
   return data;
+};
+
+export const createPayment = async ({paymentMethod, shippingAddress}: {paymentMethod: string, shippingAddress: string}) => {
+  const response = await api.post('/orders', {paymentMethod, shippingAddress}, );
+  return response.data;
 };

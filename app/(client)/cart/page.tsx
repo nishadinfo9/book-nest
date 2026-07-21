@@ -5,7 +5,6 @@ import CartSummary from './_components/CartSummary';
 import { useQuery } from '@tanstack/react-query';
 import { getCart } from '@/http/api';
 import { CartType } from '@/types/cart.type';
-import BookCardSkeleton from '@/components/global-components/BookCardSkeleton';
 
 export default function CartPage() {
   const { data: cart = [], isLoading } = useQuery({
@@ -33,6 +32,7 @@ export default function CartPage() {
 
           {
             cart?.items?.map((item: CartType) => (
+              
               <CartItem key={item.id} item={item} />
             ))}
         </div>
