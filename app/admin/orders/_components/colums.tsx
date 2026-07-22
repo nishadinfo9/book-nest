@@ -6,8 +6,8 @@ export const columns = (
 
 ): ColumnDef<OrderType>[] => [
   {
-    accessorKey: "user",
-    header: "User",
+    accessorKey: "book",
+    header: "Book",
   },
   {
     accessorKey: "status",
@@ -22,20 +22,9 @@ export const columns = (
     header: "Payment Status",
   },
   {
-    accessorKey: "paymentGateway",
-    header: "Payment Gateway",
-  },
-  {
-    accessorKey: "paymentMethod",
-    header: "Payment Method",
-  },
-  {
     accessorKey: "shippingAddress",
     header: "Shipping Address",
   },
-  {
-    accessorKey: "transactionId",
-    header: "transactionId",
-  },
+
 
 ];
