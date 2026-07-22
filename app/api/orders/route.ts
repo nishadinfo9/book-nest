@@ -238,12 +238,9 @@ export async function GET() {
       shippingAddress: orders.shippingAddress,
      })
     .from(orders)
-   .leftJoin(users, eq(users.id, orders.userId))
     .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
     .leftJoin(books, eq(books.id, orderItems.bookId))
     .orderBy(desc(orders.createdAt))
-
-    console.log('allOrders', allOrders)
 
     return Response.json(allOrders, { status: 200 })
   } catch (error) {
