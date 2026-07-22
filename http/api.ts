@@ -144,3 +144,8 @@ export const createPayment = async ({paymentMethod, shippingAddress}: {paymentMe
   const response = await api.post('/orders', {paymentMethod, shippingAddress}, );
   return response.data;
 };
+
+export const getAllOrders = async () => {
+  const { data } = await api.get('/orders');
+  return data;
+};
