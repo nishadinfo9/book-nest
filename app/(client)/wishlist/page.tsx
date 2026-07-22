@@ -66,7 +66,7 @@ const WishList = () => {
               className='group bg-background flex gap-5 rounded-2xl border p-5 transition-all hover:shadow-md'
             >
               {/* Cover */}
-              <Link href={`/books/${book.slug}`}>
+              <Link href={`/shop/${book.slug}`}>
                 <Image
                   src={book.image}
                   alt={book.title}

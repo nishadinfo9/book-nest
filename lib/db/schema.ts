@@ -19,12 +19,21 @@ export const userRoleEnum = pgEnum("user_role", [
 ]);
 
 export const paymentStatusEnum = pgEnum("payment_status", [
-  "PENDING",
+  "UNPAID",
   "PAID",
   "FAILED",
   "CANCELLED",
   "REFUNDED",
-  "PARTIAL_REFUND",
+]);
+
+export const statusEnum = pgEnum("payment_status", [
+  'PENDING',
+  'PROCESSING',
+  'PAID',
+  'FAILED',
+  'CANCELLED',
+  'REFUNDED',
+  'COMPLETED'
 ]);
 
 export const paymentGatewayEnum = pgEnum("payment_gateway", [
@@ -61,7 +70,6 @@ export const users = pgTable("user", {
     emailIndex: index("idx_user_email").on(table.email),
   };
 });
-
 
 export const books = pgTable("books", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -121,9 +129,9 @@ export const cartItems = pgTable("cart_items", {
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id, { onDelete: 'cascade' }).notNull(),
-  status: varchar("status", { length: 20 }).default("PENDING").notNull(),
+  status: statusEnum('status').default("PENDING").notNull(),
   totalAmount: numeric("total_amount", { precision: 10, scale: 2 }).notNull(),
-  paymentStatus: paymentStatusEnum("payment_status").default("PENDING").notNull(),
+  paymentStatus: paymentStatusEnum("payment_status").default("UNPAID").notNull(),
   paymentGateway: paymentGatewayEnum("payment_gateway"),
   paymentMethod: paymentMethodEnum("payment_method"),
   shippingAddress: text("shipping_address"),
@@ -181,7 +189,7 @@ export const payments = pgTable("payments",{
     method: varchar("method", { length: 30 }),
     amount: numeric("amount", {precision: 10,scale: 2,}).notNull(),
     currency: varchar("currency", { length: 10 }).default("BDT").notNull(),
-    status: varchar("status", { length: 20 }).default("PENDING").notNull(),
+    status: paymentStatusEnum('status').default('UNPAID').notNull(),
     gatewayTransactionId: varchar("gateway_transaction_id", {length: 100,}), 
     paidAt: timestamp("paid_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),

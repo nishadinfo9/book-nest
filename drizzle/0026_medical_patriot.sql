@@ -1,0 +1,2 @@
+ALTER TABLE "orders" ALTER COLUMN "status" SET DEFAULT 'PENDING'::"public"."payment_status";--> statement-breakpoint
+ALTER TABLE "orders" ALTER COLUMN "status" SET DATA TYPE "public"."payment_status" USING "status"::"public"."payment_status";
