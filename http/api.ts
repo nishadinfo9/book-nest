@@ -154,3 +154,8 @@ export const getpaymantHistory = async () => {
   const { data } = await api.get('/payment/history');
   return data;
 };
+
+export const getDashboardData = async () => {
+  const { data } = await api.get('/dashboard');
+  return data;
+};
