@@ -35,7 +35,8 @@ export async function GET() {
     }
 
     const paymentHistory = await db
-    .select({ 
+    .select(
+      { 
         book: books.title,
         transactionId: payments.transactionId,
         gateway: payments.gateway,
@@ -43,7 +44,8 @@ export async function GET() {
         amount: payments.amount,
         currency: payments.currency,
         status: payments.status
-     })
+     }
+    )
     .from(payments)
     .leftJoin(orderItems, eq(orderItems.orderId, payments.orderId))
     .leftJoin(books, eq(books.id, orderItems.bookId))

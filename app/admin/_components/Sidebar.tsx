@@ -19,6 +19,7 @@ const Sidebar = () => {
     { label: "Deliver Persons", href: "/admin/delivery-persons", icon: Users },
     { label: "Orders", href: "/admin/orders", icon: ShoppingCart },
     { label: "Inventory", href: "/admin/inventory", icon: Blocks },
+     { label: "Payment", href: "/admin/payment", icon: Blocks },
   ];
 
   return (

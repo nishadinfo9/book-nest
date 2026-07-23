@@ -149,3 +149,8 @@ export const getAllOrders = async () => {
   const { data } = await api.get('/orders');
   return data;
 };
+
+export const getpaymantHistory = async () => {
+  const { data } = await api.get('/payment/history');
+  return data;
+};
