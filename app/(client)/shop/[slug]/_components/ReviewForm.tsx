@@ -46,7 +46,9 @@ export default function ReviewForm({ bookId }: { bookId: string }) {
     formData.append('rating', String(formValue.rating));
     formData.append('comment', formValue.comment);
     formData.append('bookId', bookId);
-    formData.append('image', formValue.image);
+    if (formValue.image) {
+      formData.append('image', formValue.image);
+    }
     mutate(formData);
   };
 
