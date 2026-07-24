@@ -11,7 +11,7 @@ export const ReviewFormSchema = z.object({
     .min(1, 'Rating must be at least 1')
     .max(5, 'Rating cannot be more than 5'),
 
-  image: z.file(),
+  image: z.file().optional(),
 
 });
 

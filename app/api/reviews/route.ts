@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
+
   const [user] = await db
     .select()
     .from(users)
@@ -22,6 +23,8 @@ export async function POST(request: Request) {
     return Response.json({ message: 'User not found' }, { status: 404 });
   }
 
+
+
   const formData = await request.formData();
   const file = formData.get('image') as File;
   const bookId = formData.get('bookId');
@@ -29,6 +32,7 @@ export async function POST(request: Request) {
   const comment = formData.get('comment');
 
   const data = ReviewFormSchemaBackend.safeParse({ bookId, rating, comment });
+
 
   if (!data.success) {
     return Response.json(
@@ -39,23 +43,13 @@ export async function POST(request: Request) {
 
   const validation = data.data;
 
-  try {
-    const [bookReviews] = await db
-      .select()
-      .from(reviews)
-      .where(
-        and(eq(reviews.userId, user.id), eq(reviews.bookId, validation.bookId)),
-      )
-      .limit(1);
 
-    if (bookReviews) {
-      return Response.json(
-        { message: 'review already exist' },
-        { status: 401 },
-      );
-    }
+  try {
+
 
     let bookImageUrl: string | null = null;
+
+
 
     if (file instanceof File) {
       try {
@@ -65,13 +59,15 @@ export async function POST(request: Request) {
       }
     }
 
+
     await db.insert(reviews).values({
       userId: user.id,
       bookId: validation.bookId,
       rating: validation.rating,
       comment: validation.comment,
-      image: bookImageUrl,
+      image: bookImageUrl || null,
     });
+
 
     return Response.json('review created successfully', { status: 200 });
   } catch (error) {
@@ -92,7 +88,7 @@ export async function GET() {
         user: users.name
       })
       .from(reviews)
-      .leftJoin(users, eq(reviews.userId,users.id ))
+      .leftJoin(users, eq(reviews.userId, users.id))
       .orderBy(desc(reviews.createdAt));
 
     return Response.json(allReviews, { status: 200 });

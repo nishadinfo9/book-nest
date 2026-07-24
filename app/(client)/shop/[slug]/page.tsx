@@ -68,7 +68,11 @@ export default function Page() {
           Customer Reviews
         </h2>
 
-        <div className="space-y-6">
+        
+      <ReviewForm bookId={book.id}/>
+
+      </section>
+<div className="space-y-6">
 
           {
             reviews.map((item: ReviewType)=>(
@@ -78,10 +82,6 @@ export default function Page() {
 
 
         </div>
-
-      </section>
-
-      <ReviewForm bookId={book.id}/>
 
     </main>
   );

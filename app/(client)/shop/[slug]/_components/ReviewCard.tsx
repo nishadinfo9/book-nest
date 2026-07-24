@@ -55,8 +55,7 @@ export default function ReviewCard({ item }: { item: ReviewType }) {
         />
       </div>
 
-      {/* Example for multiple images */}
-      {/* {item.images?.slice(1).map(...)} */}
+
     </div>
   )}
 </div>
