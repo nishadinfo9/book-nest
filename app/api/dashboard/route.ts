@@ -82,6 +82,13 @@ export async function GET() {
         .orderBy(inventory.availableStock),
     ]);
 
+    console.log({ revenue,
+      totalOrders,
+      totalCustomers,
+      totalBooks,
+      recentOrders,
+      lowStockBooks,})
+
     return NextResponse.json({
       success: true,
 
@@ -91,9 +98,7 @@ export async function GET() {
         customers: totalCustomers[0]?.total ?? 0,
         books: totalBooks[0]?.total ?? 0,
       },
-
       recentOrders,
-
       lowStockBooks,
     });
   } catch (error) {

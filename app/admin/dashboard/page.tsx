@@ -30,6 +30,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getDashboardData } from "@/http/api";
 import { OrderResponse } from "@/types/order.type";
+import DashboardSkeleton from "./_components/dashboardSkeleton";
 
 const AdminPage = () => {
 
@@ -38,8 +39,10 @@ const AdminPage = () => {
     queryFn: getDashboardData,
   });
 
+console.log('dashboardData', dashboardData)
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div><DashboardSkeleton/></div>;
   }
 
   const stats = dashboardData?.stats;
