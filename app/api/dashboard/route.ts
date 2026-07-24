@@ -82,12 +82,6 @@ export async function GET() {
         .orderBy(inventory.availableStock),
     ]);
 
-    console.log({ revenue,
-      totalOrders,
-      totalCustomers,
-      totalBooks,
-      recentOrders,
-      lowStockBooks,})
 
     return NextResponse.json({
       success: true,

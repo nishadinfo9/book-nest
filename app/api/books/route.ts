@@ -8,7 +8,7 @@ import {
 } from '@/lib/db/schema';
 import { uploadImageToCloudinary } from '@/lib/cloudinary/uploadImage';
 import { generateSlug } from '@/helpers/generateSlug';
-import { and, desc, eq, sql } from 'drizzle-orm';
+import {  desc, eq, sql } from 'drizzle-orm';
 import { BookSchema } from '@/lib/validation';
 
 export async function GET(request: Request) {
