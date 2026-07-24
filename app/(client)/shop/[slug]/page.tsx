@@ -17,21 +17,20 @@ import { ReviewType } from "@/types/review.type";
 export default function Page() {
   const { slug } = useParams();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["single-book", slug],
     queryFn: () => getSingleBook(slug as string),
   });
 
   const book = data?.data;
 
-    const { data: reviews, isLoading:reviewLoading } = useQuery({
+  const { data: reviews, isLoading: reviewLoading } = useQuery({
     queryKey: ["reviews"],
     queryFn: () => getReviews(),
   });
 
-  console.log('reviews', reviews)
 
-  if (isLoading ) {
+  if (isLoading) {
     return (
       <div className="container py-10">
         <Skeleton className="h-[550px] w-full rounded-xl" />
@@ -49,40 +48,25 @@ export default function Page() {
 
   return (
     <main className="container px-10 mt-8">
-
       <section className="grid lg:grid-cols-2 gap-12">
-
         <BookGallery book={book} />
-
         <BookInfo book={book} />
-
       </section>
-
       <BookDescription description={book.description} />
-
       <BookMeta book={book} />
-
       <section className="mt-16">
-
         <h2 className="text-2xl font-bold mb-8">
           Customer Reviews
         </h2>
-
-        
-      <ReviewForm bookId={book.id}/>
-
+        <ReviewForm bookId={book.id} />
       </section>
-<div className="space-y-6">
-
-          {
-            reviews.map((item: ReviewType)=>(
-              <ReviewCard key={item.id} item={item}/>
-            ))
-          }
-
-
-        </div>
-
+      <div className="space-y-6">
+        {
+          reviews.map((item: ReviewType) => (
+            <ReviewCard key={item.id} item={item} />
+          ))
+        }
+      </div>
     </main>
   );
 }
