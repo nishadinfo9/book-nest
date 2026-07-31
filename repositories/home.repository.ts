@@ -14,13 +14,17 @@ import { and, desc, eq, sql } from "drizzle-orm";
 export const HomeRepository = {
 
     async getNewArrival() {
-        return db.select(baseBookSelection)
+        const newArrival= await db.select(baseBookSelection)
             .from(books).where(eq(books.status, 'PUBLISHED'))
             .innerJoin(categories, eq(categories.id, books.categoryId))
             .innerJoin(authors, eq(authors.id, books.authorId))
             .innerJoin(publishers, eq(publishers.id, books.publisherId))
             .orderBy(desc(books.createdAt))
             .limit(10)
+
+            console.log('newArrival',newArrival)
+
+            return newArrival
     },
 
     async getBestSeller() {

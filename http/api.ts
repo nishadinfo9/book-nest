@@ -3,6 +3,7 @@ import { api } from './client';
 import { AuthorFormValue } from '@/app/admin/authors/_components/authors-form';
 import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
 import { CategoryFormValue } from '@/app/admin/category/_components/category-form';
+import { PublisherFormValue } from '@/app/admin/publisher/_components/publisher-form';
 
 export const registerUser = async (data: RegisterUserType) => {
   const response = await api.post('/signup', data);
@@ -183,6 +184,27 @@ export const deleteCategory = async (id: string) => {
 };
 
 export const getCategoryById = async (id: string) => {
-  const response = await api.get(`/authors/${id}`);
+  const response = await api.get(`/categories/${id}`);
+  return await response.data;
+};
+
+
+export const createPublisher = async (data: PublisherFormValue) => {
+  const response = await api.post('/publisher', data);
+  return response.data;
+};
+
+export const getAllPublishers = async () => {
+  const response = await api.get('/publisher');
+  return await response.data;
+};
+
+export const deletePublisher = async (id: string) => {
+  const response = await api.delete(`/publisher/${id}`);
+  return await response.data;
+};
+
+export const getPublisherById = async (id: string) => {
+  const response = await api.get(`/publisher/${id}`);
   return await response.data;
 };
