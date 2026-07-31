@@ -42,7 +42,7 @@ export default function SearchBox() {
 
     return (
 
-        <div className="relative hidden w-full max-w-xl lg:block">
+        <div className="relative hidden w-full max-w-md lg:block">
             <Input
                 value={search}
                 onChange={(e) => {

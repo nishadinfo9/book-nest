@@ -5,9 +5,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "@/components/ui/button";
-
 import { Menu } from "lucide-react";
-
 import Link from "next/link";
 import { navigation } from "./navigation";
 
@@ -38,6 +36,12 @@ export default function MobileNav() {
               {item.title}
             </Link>
           ))}
+
+          <Link
+              href={'/admin/dashboard'}
+            >
+              Dashboard
+            </Link>
 
         </div>
 

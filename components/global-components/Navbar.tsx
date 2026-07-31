@@ -37,13 +37,13 @@ export default function Navbar() {
 
             <MobileNav />
 
-             <Link
-            href='/'
-            className='flex items-center gap-2 text-2xl font-bold tracking-tight'
-          >
-            <Logo />
-BookNest
-          </Link>
+            <Link
+              href='/'
+              className='flex items-center gap-2 text-2xl font-bold tracking-tight'
+            >
+              <Logo />
+              BookNest
+            </Link>
 
             <DesktopNav />
 
@@ -51,7 +51,7 @@ BookNest
 
           <SearchBox />
 
-          <NavActions cartQty={cart?.summary?.totalQuantity}/>
+          <NavActions cartQty={cart?.summary?.totalQuantity} />
 
         </div>
 

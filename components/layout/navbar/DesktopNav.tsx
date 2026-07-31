@@ -3,7 +3,7 @@ import { navigation } from "./navigation";
 
 export default function DesktopNav() {
   return (
-    <nav className="hidden items-center gap-7 lg:flex">
+    <nav className="hidden items-center gap-5 lg:flex">
       {navigation.map((item) => (
         <Link
           key={item.href}
@@ -13,6 +13,11 @@ export default function DesktopNav() {
           {item.title}
         </Link>
       ))}
+      <Link
+              href={'/admin/dashboard'}
+            >
+              Dashboard
+            </Link>
     </nav>
   );
 }
