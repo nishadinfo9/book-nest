@@ -11,23 +11,41 @@ import Link from "next/link";
 const banners = [
   {
     id: 1,
-    image: '/banner1.jpg',
+    image: '/slide1.jpg',
   },
   {
     id: 2,
-    image: '/banner2.jpg',
+    image: '/slide2.jpg',
   },
 
   {
     id: 3,
-    image: '/banner3.jpg',
-  }
+    image: '/slide3.jpg',
+  },
+  {
+    id: 4,
+    image: '/slide4.jpg',
+  },
+  {
+    id: 5,
+    image: '/slide5.jpg',
+  },
+  {
+    id: 6,
+    image: '/slide6.jpg',
+  },
+  {
+    id: 7,
+    image: '/slide7.jpg',
+  },
 ];
 
-export default function HeroBanner() {
+export default function HeroSlide() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
+      align: 'start',
+      slidesToScroll:1
     },
     [
       Autoplay({
@@ -55,18 +73,17 @@ export default function HeroBanner() {
             {banners.map((banner) => (
               <div
                 key={banner.id}
-                className="flex-[0_0_100%] min-w-0"
+              className="flex-[0_0_20%] px-2"
               >
-
-               <Link href={'#'}>
+                 <Link href={'#'}>
                 <Image
-                  width={1000}
-                  height={1000}
+                  width={600}
+                  height={600}
                   src={banner.image}
                   alt='banner'
-                  className=" h-96 w-full object-cover"
+                  className=" h-96 w-full object-cover  rounded-lg"
                 />
-               </Link>
+                </Link>
               </div>
 
 
