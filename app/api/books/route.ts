@@ -8,8 +8,9 @@ import {
 } from '@/lib/db/schema';
 import { uploadImageToCloudinary } from '@/lib/cloudinary/uploadImage';
 import { generateSlug } from '@/helpers/generateSlug';
-import {  desc, eq, sql } from 'drizzle-orm';
+import {  desc, eq } from 'drizzle-orm';
 import { BookSchema } from '@/lib/validation';
+import { bookCardSelection } from '@/lib/db/book.select';
 
 export async function GET(request: Request) {
   try {
@@ -19,18 +20,7 @@ export async function GET(request: Request) {
     const page = Number(searchParams.get('page') ?? 1);
 
     const allBooks = await db
-      .select({
-        id: books.id,
-        slug: books.slug,
-        title: books.title,
-        price: books.price,
-        coverImage: books.coverImage,
-        averageRating: books.averageRating,
-        category: categories.name,
-        publisher: publishers.name,
-        author: authors.name,
-        wishlisted: sql<boolean>`${wishlists.id} IS NOT NULL`,
-      })
+      .select(bookCardSelection)
       .from(books)
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
       .leftJoin(categories, eq(categories.id, books.categoryId))
