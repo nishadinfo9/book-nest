@@ -1,112 +1,89 @@
-import { desc, eq, ilike, or, sql } from 'drizzle-orm';
-import { db } from '@/lib/db/db';
-import { books, authors, categories, publishers } from '@/lib/db/schema';
-import { redis } from '@/lib/db/redis';
+import { NextResponse } from "next/server";
+import { db } from "@/lib/db/db";
+import { eq, ilike, or, desc, sql } from "drizzle-orm";
+import { authors, books, categories, publishers, wishlists } from "@/lib/db/schema";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    console.log('searchParams', searchParams)
 
-    const query = searchParams.get('q')?.trim() ?? '';
+    const query = searchParams.get("q")?.trim() || "";
+    const page = Number(searchParams.get("page") || 1);
+    const limit = Number(searchParams.get("limit") || 12);
 
-    const page = Math.max(1, Number(searchParams.get('page')) || 1);
-
-    const limit = Math.min(
-      50,
-      Math.max(1, Number(searchParams.get('limit')) || 10),
-    );
-
-    if (!query) {
-      return Response.json(
-        {
-          success: false,
-          message: 'Search query is required.',
-        },
-        {
-          status: 400,
-        },
-      );
-    }
+    console.log('query', query)
 
     const offset = (page - 1) * limit;
 
-    const cacheKey = `books:search:${query.toLowerCase()}:page:${page}:limit:${limit}`;
-
-    const cached = await redis.get(cacheKey);
-
-    if (cached) {
-      return Response.json(JSON.parse(cached));
+    if (!query) {
+      return NextResponse.json({
+        books: [],
+        pagination: {
+          total: 0,
+          page,
+          limit,
+          totalPages: 0,
+        },
+      });
     }
 
     const whereCondition = or(
       ilike(books.title, `%${query}%`),
-      ilike(authors.name, `%${query}%`),
-      ilike(categories.name, `%${query}%`),
-      ilike(publishers.name, `%${query}%`),
+      ilike(books.description, `%${query}%`),
+      ilike(authors.name, `%${query}%`)
     );
 
-    const data = await db
+    const results = await db
       .select({
-        id: books.id,
-        slug: books.slug,
-        title: books.title,
-        price: books.price,
-        coverImage: books.coverImage,
-        averageRating: books.averageRating,
-        author: authors.name,
-        category: categories.name,
-        publisher: publishers.name,
+       id: books.id,
+              slug: books.slug,
+              title: books.title,
+              price: books.price,
+              coverImage: books.coverImage,
+              averageRating: books.averageRating,
+              category: categories.name,
+              publisher: publishers.name,
+              author: authors.name,
+              wishlisted: sql<boolean>`${wishlists.id} IS NOT NULL`,
       })
       .from(books)
-      .leftJoin(authors, eq(authors.id, books.authorId))
-      .leftJoin(categories, eq(categories.id, books.categoryId))
+      .leftJoin(authors, eq(books.authorId, authors.id))
       .leftJoin(publishers, eq(publishers.id, books.publisherId))
+      .leftJoin(categories, eq(categories.id, books.categoryId))
+      .leftJoin(wishlists, eq(wishlists.bookId, books.id))
       .where(whereCondition)
       .orderBy(desc(books.createdAt))
       .limit(limit)
       .offset(offset);
 
-    const [{ total }] = await db
+    const [{ count }] = await db
       .select({
-        total: sql<number>`count(*)`,
+        count: sql<number>`count(*)`,
       })
       .from(books)
-      .leftJoin(authors, eq(authors.id, books.authorId))
-      .leftJoin(categories, eq(categories.id, books.categoryId))
-      .leftJoin(publishers, eq(publishers.id, books.publisherId))
+      .leftJoin(authors, eq(books.authorId, authors.id))
       .where(whereCondition);
 
-    const response = {
-      success: true,
-      data,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-        hasNextPage: page < Math.ceil(total / limit),
-      },
-    };
+      console.log('results', results)
 
-    await redis.set(
-      cacheKey,
-      JSON.stringify(response),
-      'EX',
-      300, // 5 minutes
-    );
-
-    return Response.json(response);
+    return NextResponse.json(
+      // {
+     results
+      // pagination: {
+      //   total: Number(count),
+      //   page,
+      //   limit,
+      //   totalPages: Math.ceil(Number(count) / limit),
+      // },
+    // }
+  );
   } catch (error) {
     console.error(error);
 
-    return Response.json(
-      {
-        success: false,
-        message: 'Failed to search books.',
-      },
-      {
-        status: 500,
-      },
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
     );
   }
 }
