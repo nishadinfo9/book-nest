@@ -2,6 +2,7 @@ import { FormValue } from '@/app/admin/inventory/_components/inventory-form';
 import { api } from './client';
 import { AuthorFormValue } from '@/app/admin/authors/_components/authors-form';
 import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
+import { CategoryFormValue } from '@/app/admin/category/_components/category-form';
 
 export const registerUser = async (data: RegisterUserType) => {
   const response = await api.post('/signup', data);
@@ -42,10 +43,6 @@ export const deleteBook = async (slug: string) => {
   return await response.data;
 };
 
-export const getAllCategories = async () => {
-  const response = await api.get('/categories');
-  return await response.data;
-};
 
 export const getAllPublisher = async () => {
   const response = await api.get('/publisher');
@@ -168,4 +165,24 @@ export const getBookSearchResult = async ({term}:{term: string}) => {
   console.log('term', term)
   const { data } = await api.get(`/books/search?q=${term}&page=${1}&limit=${10}`);
   return data;
+};
+
+export const createCategory = async (data: CategoryFormValue) => {
+  const response = await api.post('/categories', data);
+  return response.data;
+};
+
+export const getAllCategories = async () => {
+  const response = await api.get('/categories');
+  return await response.data;
+};
+
+export const deleteCategory = async (id: string) => {
+  const response = await api.delete(`/categories/${id}`);
+  return await response.data;
+};
+
+export const getCategoryById = async (id: string) => {
+  const response = await api.get(`/authors/${id}`);
+  return await response.data;
 };

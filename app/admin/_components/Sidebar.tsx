@@ -16,10 +16,11 @@ const Sidebar = () => {
     { label: "Dashboard", href: "/admin/dashboard", icon: HomeIcon },
     { label: "Books", href: "/admin/books", icon: Layers },
     { label: "Authors", href: "/admin/authors", icon: Warehouse },
+    { label: "Category", href: "/admin/category", icon: Blocks },
     { label: "Deliver Persons", href: "/admin/delivery-persons", icon: Users },
     { label: "Orders", href: "/admin/orders", icon: ShoppingCart },
     { label: "Inventory", href: "/admin/inventory", icon: Blocks },
-     { label: "Payment", href: "/admin/payment", icon: Blocks },
+    { label: "Payment", href: "/admin/payment", icon: Blocks },
   ];
 
   return (
