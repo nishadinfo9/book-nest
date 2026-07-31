@@ -2,7 +2,6 @@ import { FormValue } from '@/app/admin/inventory/_components/inventory-form';
 import { api } from './client';
 import { AuthorFormValue } from '@/app/admin/authors/_components/authors-form';
 import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
-import { OrdersInput } from '@/lib/validation/orderSchema';
 
 export const registerUser = async (data: RegisterUserType) => {
   const response = await api.post('/signup', data);
@@ -157,5 +156,16 @@ export const getpaymantHistory = async () => {
 
 export const getDashboardData = async () => {
   const { data } = await api.get('/dashboard');
+  return data;
+};
+
+export const getBookSuggestion = async ({search}:{search: string}) => {
+  const { data } = await api.get(`/books/search/suggestion?q=${search}`);
+  return data;
+};
+
+export const getBookSearchResult = async ({term}:{term: string}) => {
+  console.log('term', term)
+  const { data } = await api.get(`/books/search?q=${term}&page=${1}&limit=${10}`);
   return data;
 };

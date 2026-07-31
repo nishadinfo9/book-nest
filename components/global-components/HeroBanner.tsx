@@ -5,27 +5,19 @@ import Autoplay from "embla-carousel-autoplay";
 
 import { useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
+import Image from "next/image";
 
 const banners = [
-  {
-    title: "Best Place To Find Your Favorite Books",
-    description:
-      "Explore our latest releases and must-read books: your next favorite story awaits!",
-    image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f",
-  },
+ {id: 1,
+  image: '/banner1.jpg',
+ },
+ {id: 2,
+  image: '/banner2.jpg',
+ },
 
-  {
-    title: "Discover Your Next Favorite Story",
-    description: "Thousands of books from popular authors waiting for you.",
-    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794",
-  },
-
-  {
-    title: "Build Your Dream Library",
-    description: "Collect, save and enjoy your favorite books anytime.",
-    image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d",
-  },
+ {id: 3,
+  image: '/banner3.jpg',
+ }
 ];
 
 export default function HeroBanner() {
@@ -52,7 +44,7 @@ export default function HeroBanner() {
   return (
     <section className="mt-8 max-w-7xl px-6 mx-auto">
       <div
-        className="relative overflow-hidden rounded-2xl bg-[#5bb4d4]
+        className="relative overflow-hidden rounded-2xl
 "
       >
         <div ref={emblaRef} className="overflow-hidden">
@@ -63,51 +55,18 @@ export default function HeroBanner() {
                 className="flex-[0_0_100%] min-w-0
 "
               >
-                <div
-                  className="h-80 flex items-center
-"
-                >
-                  <div
-                    className="w-1/2 px-16 text-white
-"
-                  >
-                    <h1
-                      className=" text-4xl font-bold leading-tight
-"
-                    >
-                      {banner.title}
-                    </h1>
-
-                    <p
-                      className=" mt-4 text-sm max-w-md
-"
-                    >
-                      {banner.description}
-                    </p>
-
-                    <button
-                      className=" mt-8 bg-pink-500 px-5 py-2 rounded-md text-sm
-"
-                    >
-                      <Link href='/shop'>
-                      See All Books →
-                      </Link>
-                    </button>
-                  </div>
-
-                  <div
-                    className=" w-1/2 h-full flex justify-center
-"
-                  >
-                    <img
+               
+                    <Image
+                    width={1000}
+                    height={1000}
                       src={banner.image}
-                      alt={banner.title}
-                      className=" h-full object-cover
+                      alt='banner'
+                      className=" h-full w-full object-cover
 "
                     />
                   </div>
-                </div>
-              </div>
+         
+          
             ))}
           </div>
         </div>
