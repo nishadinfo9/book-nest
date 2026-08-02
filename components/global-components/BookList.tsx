@@ -3,6 +3,7 @@
 import { BookType } from '@/types/book.type';
 import BookCard from './BookCard';
 import BookCardSkeleton from './BookCardSkeleton';
+import Container from '../common/Container';
 
 type Props = {
   title: string
@@ -27,7 +28,8 @@ export default function BookList({
 
 
   return (
-    <section className='mx-auto mt-8 max-w-7xl px-6'>
+    <Container>
+              <section className="mt-8 ">
       <div className='mb-6 flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>{title}</h2>
 
@@ -44,5 +46,6 @@ export default function BookList({
           books?.map((book) => <BookCard key={book.id} book={book} />)}
       </div>
     </section>
+    </Container>
   );
 }

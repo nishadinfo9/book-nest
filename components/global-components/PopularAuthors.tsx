@@ -1,5 +1,6 @@
 import { Author } from "@/types/author.type";
 import Image from "next/image";
+import Container from "../common/Container";
 
 type Props = {
   title: string
@@ -9,7 +10,8 @@ type Props = {
 
 export default function PopularAuthors({title, authors, loading}: Props) {
   return (
-    <section className='mt-8 max-w-7xl px-6 mx-auto'>
+   <Container>
+             <section className="mt-8 ">
       <h2 className='mb-5 text-2xl font-semibold'>{title}</h2>
 
       <div className='grid grid-cols-4 gap-5'>
@@ -37,5 +39,6 @@ export default function PopularAuthors({title, authors, loading}: Props) {
         ))}
       </div>
     </section>
+    </Container>
   );
 }

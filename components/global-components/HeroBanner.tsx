@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Container from "../common/Container";
 
 const banners = [
   {
@@ -46,7 +47,8 @@ export default function HeroBanner() {
   }, [emblaApi]);
 
   return (
-    <section className="mt-8 max-w-7xl px-6 mx-auto">
+  <Container>
+      <section className="mt-8 ">
       <div
         className="relative overflow-hidden rounded-2xl"
       >
@@ -93,5 +95,6 @@ export default function HeroBanner() {
         </button>
       </div>
     </section>
+  </Container>
   );
 }

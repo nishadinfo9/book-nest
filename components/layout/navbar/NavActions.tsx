@@ -48,9 +48,17 @@ export default function NavActions({cartQty, wishlistData}: {cartQty: number; wi
       </Link>
 
      <div className="pl-3">
-       {status === 'authenticated' && (
+       {status === 'authenticated' ?(
            <ProfileDropdown data={data}/>
-          )}
+          ): (
+            <Link className="" href={'/login'}>
+            <Button >
+              Login
+            </Button>
+            </Link>
+          )
+        
+        }
      </div>
 
     </div>

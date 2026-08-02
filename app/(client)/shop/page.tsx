@@ -5,6 +5,7 @@ import { getBooks } from '@/http/api';
 import { BookType } from '@/types/book.type';
 import BookCard from '@/components/global-components/BookCard';
 import BookCardSkeleton from '@/components/global-components/BookCardSkeleton';
+import Container from '@/components/common/Container';
 
 function Shop() {
   const {
@@ -18,7 +19,8 @@ function Shop() {
 
 
   return (
-    <section className='mt-8 px-10'>
+   <Container>
+             <section className="mt-8 ">
       <div className='mb-6 flex items-center justify-between'>
         <h2 className='text-2xl font-semibold'>Popular Books</h2>
 
@@ -33,6 +35,7 @@ function Shop() {
           books?.map((book) => <BookCard key={book.id} book={book} />)}
       </div>
     </section>
+    </Container>
   );
 }
 

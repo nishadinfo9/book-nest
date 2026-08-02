@@ -9,8 +9,12 @@ import NavActions from "../layout/navbar/NavActions";
 import { useQuery } from "@tanstack/react-query";
 import { getCart, getMyWishlists } from "@/http/api";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
+
+  const {status, data} = useSession();
+  console.log(status, )
 
   const { data: cart = [] } = useQuery({
     queryKey: ['cart'],
@@ -51,7 +55,7 @@ export default function Navbar() {
               BookNest
             </Link>
 
-            <DesktopNav />
+            <DesktopNav status={status}/>
 
           </div>
 
