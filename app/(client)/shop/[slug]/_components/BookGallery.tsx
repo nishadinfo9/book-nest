@@ -14,7 +14,7 @@ export default function BookGallery({
     alt="Book"
     width={600}
     height={600}
-    className=" w-72 mx-auto rounded-lg block"
+    className=" w-72 mx-auto h-full block "
   />
 
   <WishlistButton

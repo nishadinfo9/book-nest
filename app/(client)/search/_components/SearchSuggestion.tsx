@@ -1,3 +1,4 @@
+import { BookType } from "@/types/book.type";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,7 +6,7 @@ export default function SearchSuggestion({
     books,
     loading
 }: {
-    books: any[];
+    books: BookType[];
     loading: boolean;
 }) {
 
@@ -43,16 +44,16 @@ export default function SearchSuggestion({
 
             {
 
-                books.map((book: any) => (
+                books.map((book: BookType) => (
 
                     <Link
                         key={book.id}
-                        href={`/sh/${book.slug}`}
+                        href={`/shop/${book.slug}`}
                         className="flex items-center gap-4 border-b p-3 hover:bg-muted h-15"
                     >
 
                         <Image
-                            src={book.coverImage}
+                            src={book?.coverImage || ''}
                             alt={book.title}
                             width={30}
                             height={45}
