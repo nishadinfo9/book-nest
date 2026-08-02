@@ -1,40 +1,46 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { getBooks } from '@/http/api';
 import { BookType } from '@/types/book.type';
 import BookCard from './BookCard';
 import BookCardSkeleton from './BookCardSkeleton';
 
-export default function BookList() {
-  const {
-    data: books,
-    isLoading,
-    isError,
-  } = useQuery<BookType[]>({
-    queryKey: ['books'],
-    queryFn: getBooks,
-  });
+type Props = {
+  title: string
+    books?: BookType[];
+    loading: boolean;
+};
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+export default function BookList({
+  title,
+    books,
+    loading,
+}: Props)  {
+  // const {
+  //   data: books,
+  //   isLoading,
+  //   isError,
+  // } = useQuery<BookType[]>({
+  //   queryKey: ['books'],
+  //   queryFn: getBooks,
+  // });
+
+
 
   return (
     <section className='mx-auto mt-8 max-w-7xl px-6'>
       <div className='mb-6 flex items-center justify-between'>
-        <h2 className='text-2xl font-semibold'>Recently Added</h2>
+        <h2 className='text-2xl font-semibold'>{title}</h2>
 
         <button className='text-sm text-gray-500 underline'>See all →</button>
       </div>
 
       <div className='grid grid-cols-5 gap-6'>
-        {isLoading &&
-          Array.from({ length: 10 }).map((_, i) => (
+        {loading &&
+          Array.from({ length: 5 }).map((_, i) => (
             <BookCardSkeleton key={i} />
           ))}
 
-        {!isLoading &&
+        {!loading &&
           books?.map((book) => <BookCard key={book.id} book={book} />)}
       </div>
     </section>

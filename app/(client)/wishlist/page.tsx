@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   Heart,
   MoreHorizontal,
-  ShoppingCart,
   Star,
   Trash2,
 } from 'lucide-react';

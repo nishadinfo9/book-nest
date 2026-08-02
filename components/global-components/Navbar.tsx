@@ -7,15 +7,21 @@ import SearchBox from "../layout/navbar/SearchBox";
 import MobileNav from "../layout/navbar/MobileNav";
 import NavActions from "../layout/navbar/NavActions";
 import { useQuery } from "@tanstack/react-query";
-import { getCart } from "@/http/api";
+import { getCart, getMyWishlists } from "@/http/api";
 import Link from "next/link";
 
 export default function Navbar() {
 
-  const { data: cart = [], isLoading } = useQuery({
+  const { data: cart = [] } = useQuery({
     queryKey: ['cart'],
     queryFn: () => getCart(),
   });
+
+   const { data: wishlistData = [] } = useQuery({
+      queryKey: ['my-wishlists'],
+      queryFn: getMyWishlists,
+    });
+
 
 
   return (
@@ -51,7 +57,7 @@ export default function Navbar() {
 
           <SearchBox />
 
-          <NavActions cartQty={cart?.summary?.totalQuantity} />
+          <NavActions wishlistData={wishlistData} cartQty={cart?.summary?.totalItems} />
 
         </div>
 

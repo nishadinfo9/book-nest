@@ -5,6 +5,11 @@ import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
 import { CategoryFormValue } from '@/app/admin/category/_components/category-form';
 import { PublisherFormValue } from '@/app/admin/publisher/_components/publisher-form';
 
+export const getHomePageData = async () => {
+  const response = await api.get('/home');
+  return await response.data;
+};
+
 export const registerUser = async (data: RegisterUserType) => {
   const response = await api.post('/signup', data);
   return response.data;

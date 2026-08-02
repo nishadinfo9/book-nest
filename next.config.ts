@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         hostname: "www.bookowlsbd.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "randomuser.me",
+        pathname: "/**",
+      },
     ],
   },
 };

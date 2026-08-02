@@ -5,7 +5,7 @@ import ProfileDropdown from "./ProfileDropdown";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-export default function NavActions({cartQty}: {cartQty: number}) {
+export default function NavActions({cartQty, wishlistData}: {cartQty: number; wishlistData: any[]}) {
    const { status, data } = useSession();
  
   return (
@@ -18,12 +18,13 @@ export default function NavActions({cartQty}: {cartQty: number}) {
         className="relative"
       >
         <Heart className="size-5"/>
+           {wishlistData.length > 0 && (
 
         <Badge
           className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 flex items-center justify-center"
         >
-          1
-        </Badge>
+          {wishlistData.length}
+        </Badge>)}
       </Button>
       </Link>
 

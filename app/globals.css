@@ -128,3 +128,52 @@
     @apply font-sans;
   }
 }
+.book {
+  position: relative;
+  display: inline-block;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform .35s ease;
+}
+
+/* Book body */
+.book::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+/* Pages */
+.book::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: -4px;
+  width: 4px;
+  height: calc(100% - 4px);
+  border-radius: 0 4px 4px 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #aaa 0 1px,
+    #ececec 1px 1px
+  );
+  transition: width .35s ease, right .35s ease;
+}
+
+.book:hover {
+  transform: rotateY(-14deg);
+}
+
+.book:hover::before {
+  opacity: 1;
+}
+
+.book:hover::after {
+  width: 12px;
+  right: -12px;
+}

@@ -1,38 +1,28 @@
-const authors = [
-  {
-    name: 'Dostoyevsky',
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
+import { Author } from "@/types/author.type";
+import Image from "next/image";
 
-  {
-    name: 'Stephen King',
-    image: 'https://randomuser.me/api/portraits/men/45.jpg',
-  },
+type Props = {
+  title: string
+    authors?: Author[];
+    loading: boolean;
+};
 
-  {
-    name: 'J.K Rowling',
-    image: 'https://randomuser.me/api/portraits/women/44.jpg',
-  },
-
-  {
-    name: 'Neil Gaiman',
-    image: 'https://randomuser.me/api/portraits/men/55.jpg',
-  },
-];
-
-export default function PopularAuthors() {
+export default function PopularAuthors({title, authors, loading}: Props) {
   return (
     <section className='mt-8 max-w-7xl px-6 mx-auto'>
-      <h2 className='mb-5 text-2xl font-semibold'>Popular Authors</h2>
+      <h2 className='mb-5 text-2xl font-semibold'>{title}</h2>
 
       <div className='grid grid-cols-4 gap-5'>
-        {authors.map((author) => (
+        {authors?.map((author) => (
           <div
             key={author.name}
             className='flex items-center gap-4 rounded-xl border bg-white p-4 shadow-sm'
           >
-            <img
-              src={author.image}
+            <Image
+            width={600}
+            height={600}
+            src={author.image || 'https://randomuser.me/api/portraits/women/44.jpg'}
+            alt="author"
               className='h-14 w-14 rounded-full object-cover'
             />
 

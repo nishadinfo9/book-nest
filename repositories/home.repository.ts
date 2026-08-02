@@ -5,6 +5,7 @@ import {
     books,
     categories,
     inventory,
+    orderItems,
     publishers,
 } from "@/lib/db/schema";
 import { and, desc, eq, sql } from "drizzle-orm";
@@ -14,17 +15,13 @@ import { and, desc, eq, sql } from "drizzle-orm";
 export const HomeRepository = {
 
     async getNewArrival() {
-        const newArrival= await db.select(baseBookSelection)
+        return await db.select(baseBookSelection)
             .from(books).where(eq(books.status, 'PUBLISHED'))
             .innerJoin(categories, eq(categories.id, books.categoryId))
             .innerJoin(authors, eq(authors.id, books.authorId))
             .innerJoin(publishers, eq(publishers.id, books.publisherId))
             .orderBy(desc(books.createdAt))
             .limit(10)
-
-            console.log('newArrival',newArrival)
-
-            return newArrival
     },
 
     async getBestSeller() {
@@ -46,6 +43,21 @@ export const HomeRepository = {
             .where(and(eq(books.language, 'EN'), eq(books.status, 'PUBLISHED')))
             .orderBy(desc(books.createdAt))
             .limit(10)
+    },
+
+    async getPupularAuthor() {
+        return db.select({
+            id: authors.id,
+            name: authors.name,
+            image: authors.image,
+            totalSold: sql<number>`COUNT(${orderItems.id})`,
+        })
+            .from(authors)
+            .innerJoin(books, eq(books.authorId, authors.id))
+            .innerJoin(orderItems, eq(orderItems.bookId, books.id))
+            .groupBy(authors.id)
+            .orderBy(desc(sql`COUNT(${orderItems.id})`))
+            .limit(10);
     },
 
     async getCategoryBooks(slug: string) {

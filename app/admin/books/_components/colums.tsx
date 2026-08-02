@@ -28,7 +28,7 @@ export const columns = (
           height={500}
           width={500}
           loading="lazy"
-          className="h-10 w-10 object-cover rounded-full"
+          className="h-10 w-10 object-cover rounded-sm"
         />
       ) : (
         <span className="text-gray-400">No Image</span>

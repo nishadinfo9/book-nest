@@ -48,14 +48,14 @@ export default function SearchSuggestion({
                     <Link
                         key={book.id}
                         href={`/sh/${book.slug}`}
-                        className="flex items-center gap-4 border-b p-3 hover:bg-muted"
+                        className="flex items-center gap-4 border-b p-3 hover:bg-muted h-15"
                     >
 
                         <Image
                             src={book.coverImage}
                             alt={book.title}
-                            width={45}
-                            height={65}
+                            width={30}
+                            height={45}
                         />
 
                         <div className="flex-1">

@@ -23,7 +23,7 @@ const WishlistButton = ({
     onSuccess: (data) => {
       console.log(data);
       queryClient.invalidateQueries({
-        queryKey: ['wishlist'],
+        queryKey: ['my-wishlists'],
       });
       queryClient.invalidateQueries({
         queryKey: ['books'],
@@ -53,11 +53,11 @@ const WishlistButton = ({
       size='icon'
       aria-label='Add book to wishlist'
       variant='secondary'
-      className={`absolute z-10 h-8 w-8 cursor-pointer rounded-full bg-white/90 shadow-sm backdrop-blur hover:bg-white ${className}`}
+      className={`absolute z-10 hover:text-red-600  h-8 w-8 cursor-pointer  rounded-full bg-white/90 shadow-sm backdrop-blur ${className}`}
     >
       <Heart
         size={16}
-        className={`${wishlisted ? 'fill-red-500 hover:text-red-500' : ''}`}
+        className={` ${wishlisted ? 'fill-red-500 text-red-500' : ''}`}
       />
     </Button>
   );
