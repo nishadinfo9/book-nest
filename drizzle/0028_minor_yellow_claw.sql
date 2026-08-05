@@ -1,0 +1,1 @@
+ALTER TABLE "cart_items" ALTER COLUMN "session_id" SET NOT NULL;
