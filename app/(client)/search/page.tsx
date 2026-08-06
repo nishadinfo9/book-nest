@@ -12,7 +12,7 @@ export default function SearchPage() {
     const params = useSearchParams();
     const term = params.get("term") ?? "";
 
-    const { data: books, isLoading } = useQuery<BookType>({
+    const { data: books, isLoading } = useQuery({
         queryKey: ["search", term],
         queryFn: () => getBookSearchResult({ term })
     })
@@ -29,7 +29,7 @@ export default function SearchPage() {
                         ))}
 
                     {!isLoading &&
-                        books?.map((book) => <BookCard key={book.id} book={book} />)}
+                        books?.map((book: BookType) => <BookCard key={book.id} book={book} />)}
                 </div>
             </section>
         )

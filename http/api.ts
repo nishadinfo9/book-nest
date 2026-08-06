@@ -20,6 +20,13 @@ export const loggedInUser = async (data: LoggedInUserType) => {
   return response.data;
 };
 
+
+export const getCurrentUser = async () => {
+  const response = await api.get('/profile');
+  return await response.data;
+};
+
+
 export const getBooks = async () => {
   const response = await api.get('/books');
   return await response.data;
