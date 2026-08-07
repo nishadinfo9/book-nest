@@ -220,3 +220,14 @@ export const getPublisherById = async (id: string) => {
   const response = await api.get(`/publisher/${id}`);
   return await response.data;
 };
+
+export const getAuthorBySlug = async (slug: string) => {
+  const response = await api.get(`/authors/${slug}`);
+  return await response.data;
+};
+
+export const getAuthorBooks = async (slug: string) => {
+  const response = await api.get(`/authors/${slug}/books`);
+  return await response.data;
+};
+

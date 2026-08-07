@@ -2,14 +2,15 @@
 
 import { BookType } from '@/types/book.type';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react';
+import {  Star } from 'lucide-react';
 import CartButton from '@/components/global-components/CartButton';
+import Link from 'next/link';
 
 export default function BookInfo({ book }: { book: BookType }) {
-    
+    console.log(book.slug)
   return (
     <div>
-      <p className='text-muted-foreground text-sm'>{book.author}</p>
+      <Link href={`authors/${book.slug}/books`} className='text-muted-foreground text-sm'>{book.author}</Link>
 
       <h1 className='mt-2 text-4xl font-bold'>{book.title}</h1>
 

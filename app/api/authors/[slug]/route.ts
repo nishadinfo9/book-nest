@@ -4,9 +4,9 @@ import { eq } from "drizzle-orm";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ slug: string }> },
 ) {
-  const { id } = await params;
+  const { slug } = await params;
 
   try {
     const singleAuthors = await db
@@ -21,31 +21,31 @@ export async function GET(
         website: authors.website,
       })
       .from(authors)
-      .where(eq(authors.id, id))
+      .where(eq(authors.slug, slug))
       .limit(1);
 
     if (!singleAuthors.length) {
       return Response.json({ error: "authors not found" }, { status: 404 });
     }
 
-    return Response.json({
-      data: singleAuthors[0],
-    });
+    return Response.json(
+      singleAuthors[0],
+    );
   } catch (error) {
     console.error("authors not found:", error);
     return Response.json({ error: "authors not found" }, { status: 404 });
   }
 }
 
-export async function PATCH() {}
+export async function PATCH() { }
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const { id } = await params;
+    const { slug } = await params;
 
-    await db.delete(authors).where(eq(authors.id, id));
+    await db.delete(authors).where(eq(authors.slug, slug));
     return Response.json("author deleted successfully", { status: 200 });
   } catch (error) {
     console.log("author deleting failed", error);
