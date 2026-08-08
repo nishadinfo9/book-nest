@@ -5,6 +5,7 @@ export interface BookType {
   isbn13?: string;
   publisherId?: string;
   authorId?: string;
+  authorSlug?: string;
   language: string;
   price: number;
   coverImage?: string;

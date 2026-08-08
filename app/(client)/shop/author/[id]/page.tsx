@@ -1,26 +1,33 @@
 "use client"
 import Container from '@/components/common/Container';
-import { getAuthorBooks, getAuthorBySlug } from '@/http/api';
+import { getAuthorBooks, getAuthorById,  } from '@/http/api';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation'
-import { AuthorHeader } from './_components/author-header';
-import { AuthorBooks } from './_components/author-books';
+import { AuthorHeader } from '../_components/author-header';
+import { AuthorBooks } from '../_components/author-books';
 
 
 const Page = () => {
 
-  const { slug } = useParams();
+  const { id } = useParams();
 
     const { data: author, isLoading: authorLoading } = useQuery({
-    queryKey: ["single-author", slug],
-    queryFn: () => getAuthorBySlug(slug as string),
+    queryKey: ["single-author", id],
+    queryFn: () => getAuthorById(id as string),
   });
 
   
     const { data: authorBooks, isLoading: authorBookLoading } = useQuery({
       queryKey: ["author-books"],
-      queryFn: () => getAuthorBooks(slug as string),
+      queryFn: () => getAuthorBooks(id as string),
     });
+
+    if(authorBookLoading || authorLoading){
+      return <div>Loading...</div>
+    }
+
+    console.log('author', author)
+    console.log('authorBooks', authorBooks)
 
   return (
     <Container>

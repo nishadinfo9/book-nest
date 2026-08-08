@@ -4,9 +4,9 @@ import { eq } from "drizzle-orm";
 
 export async function GET(
   req: Request,
-  { params }: { params: Promise<{ slug: string }> },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const { slug } = await params;
+  const { id } = await params;
 
   try {
     const singleAuthors = await db
@@ -21,8 +21,9 @@ export async function GET(
         website: authors.website,
       })
       .from(authors)
-      .where(eq(authors.slug, slug))
+      .where(eq(authors.id, id))
       .limit(1);
+
 
     if (!singleAuthors.length) {
       return Response.json({ error: "authors not found" }, { status: 404 });
@@ -40,12 +41,12 @@ export async function GET(
 export async function PATCH() { }
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ slug: string }> },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { slug } = await params;
+    const { id } = await params;
 
-    await db.delete(authors).where(eq(authors.slug, slug));
+    await db.delete(authors).where(eq(authors.id, id));
     return Response.json("author deleted successfully", { status: 200 });
   } catch (error) {
     console.log("author deleting failed", error);

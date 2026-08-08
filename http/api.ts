@@ -67,10 +67,6 @@ export const getAllAuthors = async () => {
   return await response.data;
 };
 
-export const getAuthorById = async (id: string) => {
-  const response = await api.get(`/authors/${id}`);
-  return await response.data;
-};
 
 export const deleteAuthor = async (id: string) => {
   const response = await api.delete(`/authors/${id}`);
@@ -221,13 +217,14 @@ export const getPublisherById = async (id: string) => {
   return await response.data;
 };
 
-export const getAuthorBySlug = async (slug: string) => {
-  const response = await api.get(`/authors/${slug}`);
+export const getAuthorById = async (id: string) => {
+  const response = await api.get(`/authors/${id}`);
   return await response.data;
 };
 
-export const getAuthorBooks = async (slug: string) => {
-  const response = await api.get(`/authors/${slug}/books`);
+
+export const getAuthorBooks = async (id: string) => {
+  const response = await api.get(`/authors/${id}/books`);
   return await response.data;
 };
 

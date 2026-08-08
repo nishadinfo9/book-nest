@@ -32,7 +32,7 @@ export function AuthorHeader({ author }: AuthorHeaderProps) {
         {/* Author Image */}
         <div className="relative aspect-square bg-muted">
           <Image
-            src={author.image || "/images/author-placeholder.png"}
+            src={author?.image || "/images/author-placeholder.png"}
             alt={author.name}
             fill
             className="object-cover"
@@ -118,10 +118,10 @@ export function AuthorHeader({ author }: AuthorHeaderProps) {
           </div>
 
           {/* Bio */}
-          <div className="mt-8">
+          <div className="">
             <p className="text-muted-foreground leading-8">
               {author.bio ||
-                "No biography has been added for this author yet."}
+                "No bio has been added for this author yet."}
             </p>
           </div>
 

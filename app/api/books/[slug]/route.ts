@@ -19,6 +19,7 @@ export async function GET(
       .select({
         id: books.id,
         title: books.title,
+        slug: books.slug,
         price: books.price,
         coverImage: books.coverImage,
         averageRating: books.averageRating,
@@ -28,6 +29,8 @@ export async function GET(
         language: books.language,
         category: categories.name,
         publisher: publishers.name,
+        authorId: authors.id,
+        authorSlug: authors.slug,
         author: authors.name,
         wishlisted: sql<boolean>`${wishlists.id} IS NOT NULL`,
       })

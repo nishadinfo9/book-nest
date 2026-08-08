@@ -14,7 +14,7 @@ export function AuthorBooks({
   totalBooks,
 }: AuthorBooksProps) {
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 mt-8 ">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold">
@@ -48,7 +48,7 @@ export function AuthorBooks({
       ) : (
         <>
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {books.map((book) => (
+            {books?.map((book) => (
               <BookCard
                 key={book.id}
                 book={book}

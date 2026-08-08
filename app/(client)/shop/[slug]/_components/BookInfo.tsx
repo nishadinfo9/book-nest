@@ -7,10 +7,10 @@ import CartButton from '@/components/global-components/CartButton';
 import Link from 'next/link';
 
 export default function BookInfo({ book }: { book: BookType }) {
-    console.log(book.slug)
+    console.log('book', book)
   return (
     <div>
-      <Link href={`authors/${book.slug}/books`} className='text-muted-foreground text-sm'>{book.author}</Link>
+      <Link href={`author/${book.authorId}`} className='text-muted-foreground text-sm'>{book.author}</Link>
 
       <h1 className='mt-2 text-4xl font-bold'>{book.title}</h1>
 

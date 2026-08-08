@@ -29,10 +29,12 @@ export async function GET(
       })
       .from(books)
       .where(eq(books.authorId, id))
-      .leftJoin(publishers, eq(publishers.id, books.publisherId))
-      .leftJoin(categories, eq(categories.id, books.categoryId))
-      .leftJoin(authors, eq(authors.id, books.authorId))
+      .innerJoin(publishers, eq(publishers.id, books.publisherId))
+      .innerJoin(categories, eq(categories.id, books.categoryId))
+      .innerJoin(authors, eq(authors.id, books.authorId))
       .orderBy(desc(books.createdAt));
+
+      console.log('authorBooks', authorBooks)
 
     return Response.json(authorBooks, { status: 200 });
   } catch (error) {

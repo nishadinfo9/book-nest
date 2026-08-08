@@ -16,6 +16,7 @@ import { ReviewType } from "@/types/review.type";
 
 export default function Page() {
   const { slug } = useParams();
+  console.log(slug)
 
   const { data, isLoading } = useQuery({
     queryKey: ["single-book", slug],
@@ -28,6 +29,7 @@ export default function Page() {
     queryKey: ["reviews"],
     queryFn: () => getReviews(),
   });
+
 
 
   if (isLoading) {
@@ -45,6 +47,9 @@ export default function Page() {
       </div>
     );
   }
+
+  
+  console.log('book', book)
 
   return (
     <main className="container px-10 mt-8">
