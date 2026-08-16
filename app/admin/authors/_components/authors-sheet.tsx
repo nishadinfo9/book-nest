@@ -23,7 +23,7 @@ export function AuthorSheet({ isEdit, authors }: authorSheetProps) {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["create-author"],
-    mutationFn: async (data: AuthorFormValue) => createAuthor(data),
+    mutationFn: async (data: FormData) => createAuthor(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["authors"],
@@ -36,8 +36,16 @@ export function AuthorSheet({ isEdit, authors }: authorSheetProps) {
       toast("failed to create author", { position: "bottom-right" });
     },
   });
-  const onSubmit = (data: AuthorFormValue) => {
-    mutate(data);
+  const onSubmit = (formValue: AuthorFormValue) => {
+     const formData = new FormData();
+     formData.append("name", formValue.name);
+     formData.append("bio", formValue.bio);
+     formData.append("website", formValue.website);
+
+        if (formValue.image) {
+      formData.append('image', formValue.image);
+    }
+     mutate(formData);
   };
 
   return (

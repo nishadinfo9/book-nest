@@ -73,8 +73,10 @@ export const deleteAuthor = async (id: string) => {
   return await response.data;
 };
 
-export const createAuthor = async (data: AuthorFormValue) => {
-  const response = await api.post('/authors', data);
+export const createAuthor = async (data: FormData) => {
+  const response = await api.post('/authors', data,{headers:{
+     'Content-Type': 'multipart/form-data'
+  }});
   return response.data;
 };
 

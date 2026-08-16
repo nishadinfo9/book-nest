@@ -46,6 +46,29 @@ const AuthorForm = ({
           placeholder="name"
           type="text"
         />
+          <RHFInput
+            name="bio"
+            control={control}
+            label="bio"
+            placeholder="bio"
+            type="text"
+          />
+
+        <RHFInput
+          name="image"
+          control={control}
+          label="image"
+          placeholder="image"
+          type="file"
+        />
+
+         <RHFInput
+            name="website"
+            control={control}
+            label="website"
+            placeholder="website"
+            type="text"
+          />
 
         <Button
           size={"lg"}

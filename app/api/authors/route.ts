@@ -4,13 +4,19 @@ import { authors } from "@/lib/db/schema";
 import { AuthorSchema } from "@/lib/validation/authorSchema";
 import { generateSlug } from "@/helpers/generateSlug";
 import { desc } from "drizzle-orm";
+import { uploadImageToCloudinary } from "@/lib/cloudinary/uploadImage";
 
 export async function POST(request: Request) {
+
   try {
-    const body = await request.json();
+    const formData = await request.formData();
+    const image = formData.get('image') as File;
+    const name = formData.get('name');
+    const bio = formData.get('bio');
+    const website = formData.get('website');
 
     // 1. Validate input
-    const parsed = AuthorSchema.safeParse(body);
+    const parsed = AuthorSchema.safeParse({ name, image,bio,website });
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -27,6 +33,20 @@ export async function POST(request: Request) {
     // 2. Ensure unique slug (auto-generate if needed)
     const slug = data.slug || generateSlug(data.name);
 
+    
+    
+        let authorImageUrl: string | null = null;
+    
+    
+    
+        if (image instanceof File) {
+          try {
+            authorImageUrl = await uploadImageToCloudinary(image, 'author');
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
     // 3. Insert into DB
     const newAuthor = await db
       .insert(authors)
@@ -34,7 +54,7 @@ export async function POST(request: Request) {
         name: data.name,
         slug,
         bio: data.bio ?? null,
-        image: data.image || null,
+        image: authorImageUrl || null,
         country: data.country ?? null,
         website: data.website || null,
         isActive: data.isActive ?? true,
@@ -49,6 +69,7 @@ export async function POST(request: Request) {
       { status: 201 },
     );
   } catch (error: any) {
+    console.log('error:', error)
     return NextResponse.json(
       {
         error: "Something went wrong",
