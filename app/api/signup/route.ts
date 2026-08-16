@@ -2,26 +2,23 @@ import { db } from "@/lib/db/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from 'bcryptjs'
+import { RegisterSchema } from "@/lib/validation";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, provider, externalId, password } = body;
+    const reqData = body;
 
+    const { data, success } = RegisterSchema.safeParse(reqData)
 
-    if (!name || !email || !password) {
-      return Response.json(
-        { error: "Name and email are required" },
-        { status: 400 }
-      );
+    if (!success) {
+      return Response.json({ message: 'user validation failed' }, { status: 404 })
     }
 
-
-    // check duplicate user
     const [existingUser] = await db
       .select()
       .from(users)
-      .where(eq(users.email, email))
+      .where(eq(users.email, data.email))
       .limit(1);
 
 
@@ -32,15 +29,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(data.password, 10)
 
-    // create user
     await db.insert(users).values({
-      name,
-      email,
+      name: data.name,
+      email: data.email,
       password: hashedPassword,
-      provider: provider || "credentials",
-      externalId: externalId || null,
+      provider: data.provider || "credentials",
+      externalId: data.externalId || null,
       role: "CUSTOMER",
       emailVerified: false,
       isActive: true,

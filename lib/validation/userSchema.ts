@@ -16,6 +16,10 @@ export const RegisterSchema = z.object({
     .max(255),
   image: z.string().url('Invalid image URL').optional().nullable(),
 
+  provider: z.string().optional(), 
+
+  externalId: z.string().optional(),
+
   password: z
     .string()
     .trim()
