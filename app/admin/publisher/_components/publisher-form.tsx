@@ -46,6 +46,16 @@ const PublisherForm = ({
           placeholder="name"
           type="text"
         />
+
+
+        <RHFInput
+          name="logo"
+          control={control}
+          label="logo"
+          placeholder="logo"
+          type="file"
+        />
+
         <RHFInput
           name="website"
           control={control}

@@ -23,7 +23,7 @@ export function PublisherSheet({ isEdit, publishers }: publisherSheetProps) {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["create-publisher"],
-    mutationFn: async (data: PublisherFormValue) => createPublisher(data),
+    mutationFn: async (data: FormData) => createPublisher(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["publishers"],
@@ -36,9 +36,18 @@ export function PublisherSheet({ isEdit, publishers }: publisherSheetProps) {
       toast("failed to create publisher", { position: "bottom-right" });
     },
   });
-  const onSubmit = (data: PublisherFormValue) => {
-    mutate(data);
+
+  const onSubmit = (formValue: PublisherFormValue) => {
+     const formData = new FormData();
+     formData.append("name", formValue.name);
+     formData.append("website", formValue.website);
+
+        if (formValue.logo) {
+      formData.append('logo', formValue.logo);
+    }
+     mutate(formData);
   };
+  
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>

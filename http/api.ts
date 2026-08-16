@@ -199,8 +199,12 @@ export const getCategoryById = async (id: string) => {
 };
 
 
-export const createPublisher = async (data: PublisherFormValue) => {
-  const response = await api.post('/publisher', data);
+export const createPublisher = async (data: FormData) => {
+  const response = await api.post('/publisher', data,{
+     headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 

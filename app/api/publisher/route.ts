@@ -1,15 +1,48 @@
+import { uploadImageToCloudinary } from "@/lib/cloudinary/uploadImage";
 import { db } from "@/lib/db/db";
 import { publishers } from "@/lib/db/schema";
+import { PublisherSchema } from "@/lib/validation/publisherSchema";
 import { desc } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
-    const { name } = await request.json();
-    if (!name) {
-      return Response.json({ error: "Name is required" }, { status: 400 });
+    const formData = await request.formData();
+    const name = formData.get('name');
+    const logo = formData.get('logo') as File;
+    const website = formData.get('website');
+
+    // 1. Validate input
+    const parsed = PublisherSchema.safeParse({ name, logo, website });
+
+    if (!parsed.success) {
+      return Response.json(
+        {
+          error: "Validation failed",
+          details: parsed.error.flatten(),
+        },
+        { status: 400 },
+      );
     }
 
-    await db.insert(publishers).values({name});
+    const data = parsed.data;
+    let publisherImageUrl: string | null = null;
+
+
+    if (logo instanceof File) {
+      try {
+        publisherImageUrl = await uploadImageToCloudinary(logo, 'publisher');
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    await db.insert(publishers).values({
+      name: data.name,
+      logo: publisherImageUrl || null,
+      website: data.website || null,
+      isActive: data.isActive ?? true,
+    }).returning()
+    
     return Response.json(
       { message: "publisher creatded successfully" },
       { status: 201 },
