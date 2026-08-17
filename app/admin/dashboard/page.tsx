@@ -10,11 +10,9 @@ import {
   Users,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -22,7 +20,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -31,19 +28,24 @@ import { useQuery } from "@tanstack/react-query";
 import { getDashboardData } from "@/http/api";
 import { OrderResponse } from "@/types/order.type";
 import DashboardSkeleton from "./_components/dashboardSkeleton";
+import RevenueCard from "./_components/revenueCard";
+import RecentOrdersComp from "./_components/recentOrdersComp";
+import LowCostComp from "./_components/lowCostComp";
 
 const AdminPage = () => {
 
-  const { data: dashboardData, isLoading } = useQuery({
+  const { data: dashboardData,isError,error, isLoading } = useQuery({
     queryKey: ["dashboard"],
     queryFn: getDashboardData,
   });
 
-console.log('dashboardData', dashboardData)
-
   if (isLoading) {
-    return <div><DashboardSkeleton/></div>;
+    return <DashboardSkeleton />;
   }
+
+  if (isError) {
+  return <div>Failed to load dashboard.</div>;
+}
 
   const stats = dashboardData?.stats;
 
@@ -82,23 +84,7 @@ console.log('dashboardData', dashboardData)
     <>
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         {revenueCharts.map((item) => (
-          <Card key={item.id}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                {item.title}
-              </CardTitle>
-
-              <item.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-
-            <CardContent>
-              <div className="text-2xl font-bold">{item.amount}</div>
-
-              <p className="text-xs text-muted-foreground">
-                {item.percentage}
-              </p>
-            </CardContent>
-          </Card>
+          <RevenueCard key={item.id} item={item} />
         ))}
       </div>
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
@@ -106,7 +92,7 @@ console.log('dashboardData', dashboardData)
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
               <CardTitle> Recent Orders  </CardTitle>
-      
+
             </div>
             <Button asChild size="sm" className="ml-auto gap-1">
               <Link href="#">
@@ -128,37 +114,7 @@ console.log('dashboardData', dashboardData)
               </TableHeader>
               <TableBody>
                 {dashboardData?.recentOrders.map((order: OrderResponse) => (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-medium">
-                      #{order.id.slice(0, 8)}
-                    </TableCell>
-
-                    <TableCell>
-                      <Badge variant="outline">
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-
-                    <TableCell>
-                      <Badge
-                        variant={
-                          order.paymentStatus === "PAID"
-                            ? "default"
-                            : "secondary"
-                        }
-                      >
-                        {order.paymentStatus}
-                      </Badge>
-                    </TableCell>
-
-                    <TableCell>
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </TableCell>
-
-                    <TableCell className="text-right font-medium">
-                      ৳{order.amount}
-                    </TableCell>
-                  </TableRow>
+                  <RecentOrdersComp key={order.id} order={order} />
                 ))}
               </TableBody>
             </Table>
@@ -167,28 +123,13 @@ console.log('dashboardData', dashboardData)
         <Card>
           <CardHeader>
             <CardTitle>Low Stock Books</CardTitle>
-        
+
           </CardHeader>
 
           <CardContent className="space-y-4">
             {dashboardData?.lowStockBooks.length ? (
               dashboardData.lowStockBooks.map((book: OrderResponse) => (
-                <div
-                  key={book.id}
-                  className="flex items-center justify-between border rounded-lg p-3"
-                >
-                  <div>
-                    <p className="font-medium">{book.title}</p>
-
-                    <p className="text-sm text-muted-foreground">
-                      Remaining Stock
-                    </p>
-                  </div>
-
-                  <Badge variant="destructive">
-                    {book.stock}
-                  </Badge>
-                </div>
+                <LowCostComp key={book.id} book={book} />
               ))
             ) : (
               <p className="text-sm text-muted-foreground">

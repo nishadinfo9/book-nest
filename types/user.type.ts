@@ -14,11 +14,14 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface RegisterUserType {
+export interface SignupUserType {
   name: string;
   email: string;
   password: string
   confirmPassword: string
+  provider?: string
+  externalId?: string
+  image?: string
 }
 
 export interface LoggedInUserType {
