@@ -20,7 +20,9 @@ export default function DesktopNav({status}:{status: string}) {
             </Link>
         )
       }
-      
+       <Link href={'/about'} >
+              About
+            </Link>
     </nav>
   );
 }

@@ -13,8 +13,7 @@ import { useSession } from "next-auth/react";
 
 export default function Navbar() {
 
-  const {status, data} = useSession();
-  console.log(status, )
+  const {status} = useSession();
 
   const { data: cart = [] } = useQuery({
     queryKey: ['cart'],

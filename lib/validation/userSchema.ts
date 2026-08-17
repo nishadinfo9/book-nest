@@ -14,6 +14,7 @@ export const RegisterSchema = z.object({
     .toLowerCase()
     .email('Invalid email address')
     .max(255),
+    
   image: z.string().url('Invalid image URL').optional().nullable(),
 
   provider: z.string().optional(), 

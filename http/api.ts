@@ -1,16 +1,14 @@
 import { FormValue } from '@/app/admin/inventory/_components/inventory-form';
 import { api } from './client';
-import { AuthorFormValue } from '@/app/admin/authors/_components/authors-form';
-import { LoggedInUserType, RegisterUserType } from '@/types/user.type';
+import { LoggedInUserType, SignupUserType } from '@/types/user.type';
 import { CategoryFormValue } from '@/app/admin/category/_components/category-form';
-import { PublisherFormValue } from '@/app/admin/publisher/_components/publisher-form';
 
 export const getHomePageData = async () => {
   const response = await api.get('/home');
   return await response.data;
 };
 
-export const registerUser = async (data: RegisterUserType) => {
+export const registerUser = async (data: SignupUserType) => {
   const response = await api.post('/signup', data);
   return response.data;
 };

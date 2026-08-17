@@ -9,10 +9,10 @@ import Loading from "@/app/loading"
 
 export default function AccountPage() {
 
-  const {data:user, isLoading} = useQuery(currentUserQuery)
+  const { data: user, isLoading } = useQuery(currentUserQuery)
 
 
-if (isLoading) return <Loading />
+  if (isLoading) return <Loading />
 
   return (
     <Container>
@@ -25,16 +25,16 @@ if (isLoading) return <Loading />
         <ProfileHeader user={user} />
 
         <ProfileSection
-  title="Personal Information"
-  fields={[
-    { label: "Full Name", value: user.name },
-    { label: "Email", value: user.email },
-    { label: "Role", value: user.role },
-    { label: "Phone", value: user.phone },
-    { label: "City", value: user.city },
-    { label: "Country", value: user.country },
-  ]}
-/>
+          title="Personal Information"
+          fields={[
+            { label: "Full Name", value: user.name },
+            { label: "Email", value: user.email },
+            { label: "Role", value: user.role },
+            { label: "Phone", value: user.phone },
+            { label: "City", value: user.city },
+            { label: "Country", value: user.country },
+          ]}
+        />
 
       </div>
     </Container>

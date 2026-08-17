@@ -21,11 +21,23 @@ export interface SignupUserType {
   confirmPassword: string
   provider?: string
   externalId?: string
-  image?: string
+
 }
 
 export interface LoggedInUserType {
   email: string;
   password: string
+}
 
+
+export interface UserResponse {
+  id: string;
+  name: string;
+  email: string;
+  provider: string | null;
+  externalId: string | null;
+  image: string | null;
+  role: Role;
+  city?: string
+  country?: string
 }

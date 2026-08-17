@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
-import { RegisterUserType } from '@/types/user.type';
+import { SignupUserType } from '@/types/user.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema } from '@/lib/validation';
 import RHFInput from '@/components/global-components/RHFInput';
@@ -28,7 +28,7 @@ export function SignupForm({
     handleSubmit,
     control,
     formState: { isSubmitting },
-  } = useForm<RegisterUserType>({
+  } = useForm<SignupUserType>({
     resolver: zodResolver(RegisterSchema),
     mode: 'onBlur',
     defaultValues: {
@@ -40,7 +40,7 @@ export function SignupForm({
   });
   const router = useRouter();
 
-  const onSubmit = async (data: RegisterUserType) => {
+  const onSubmit = async (data: SignupUserType) => {
     try {
       console.log(data);
       await registerUser(data);

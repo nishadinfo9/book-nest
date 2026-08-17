@@ -10,10 +10,13 @@ export const SignUp = async (reqData: SignupUserType) => {
 const result = RegisterSchema.safeParse(reqData);
 
 if (!result.success) {
-    console.log(result.error);
+  return Response.json(
+    { message: result.error.message || 'Invalid input'},
+    { status: 409 }
+  );
 }
 
-    const existingUser = await findUserByEmail(result?.data?.email)
+    const existingUser = await findUserByEmail(result.data.email)
 
     if (existingUser) {
         return Response.json(
@@ -22,14 +25,14 @@ if (!result.success) {
         );
     }
 
-    const hashedPassword = await hashPassword(data.password)
+    const hashedPassword = await hashPassword(result.data.password)
 
     await db.insert(users).values({
-        name: data.name,
-        email: data.email,
+        name: result.data.name,
+        email: result.data.email,
         password: hashedPassword,
-        provider: data.provider || "credentials",
-        externalId: data.externalId || null,
+        provider: result.data.provider || "credentials",
+        externalId: result.data.externalId || null,
         role: "CUSTOMER",
         emailVerified: false,
         isActive: true,
