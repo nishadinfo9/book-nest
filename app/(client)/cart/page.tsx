@@ -16,9 +16,11 @@ export default function CartPage() {
     return <div>Loading...</div>;
   }
 
-  if (cart.length === 0) {
+
+  if (cart.items
+    .length === 0) {
     return (
-      <div className='flex h-[60vh] items-center justify-center'>
+      <div className='flex h-[72vh] items-center justify-center'>
         <h2 className='text-2xl font-semibold'>Your cart is empty</h2>
       </div>
     );
@@ -28,11 +30,11 @@ export default function CartPage() {
     <section className='mx-auto max-w-7xl px-6 py-10'>
       <div className='grid gap-8 lg:grid-cols-3'>
         <div className='space-y-5 lg:col-span-2'>
-        
+
 
           {
             cart?.items?.map((item: CartType) => (
-              
+
               <CartItem key={item.id} item={item} />
             ))}
         </div>
