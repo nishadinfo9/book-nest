@@ -18,7 +18,7 @@ const Sidebar = () => {
     { label: "Authors", href: "/admin/authors", icon: Warehouse },
     { label: "Category", href: "/admin/category", icon: Blocks },
     { label: "Publisher", href: "/admin/publisher", icon: Blocks },
-    { label: "Deliver Persons", href: "/admin/delivery-persons", icon: Users },
+    { label: "Deliver Persons", href: "#", icon: Users },
     { label: "Orders", href: "/admin/orders", icon: ShoppingCart },
     { label: "Inventory", href: "/admin/inventory", icon: Blocks },
     { label: "Payment", href: "/admin/payment", icon: Blocks },
