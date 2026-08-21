@@ -34,7 +34,7 @@ import LowCostComp from "./_components/lowCostComp";
 
 const AdminPage = () => {
 
-  const { data: dashboardData,isError,error, isLoading } = useQuery({
+  const { data: dashboardData, isError, isLoading } = useQuery({
     queryKey: ["dashboard"],
     queryFn: getDashboardData,
   });
@@ -43,11 +43,10 @@ const AdminPage = () => {
     return <DashboardSkeleton />;
   }
 
-  if (isError) {
-  return <div>Failed to load dashboard.</div>;
-}
-
+  
   const stats = dashboardData?.stats;
+  
+  console.log('stats', stats)
 
   const revenueCharts = [
     {

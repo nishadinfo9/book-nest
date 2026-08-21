@@ -1,32 +1,33 @@
 import { DashboardRepository } from "@/repositories/dashboard.repository";
 
-export async function getDashboardData() {
-  const [
-    revenue,
-    totalOrders,
-    totalCustomers,
-    totalBooks,
-    recentOrders,
-    lowStockBooks,
-  ] = await Promise.all([
-    DashboardRepository.getTotalRevenue(),
-    DashboardRepository.getTotalOrders(),
-    DashboardRepository.getTotalCustomers(),
-    DashboardRepository.getTotalBooks(),
-    DashboardRepository.getRecentOrders(),
-    DashboardRepository.getLowStockBooks(),
-  ]);
+export async function getDashboardRevenue() {
+  const revenue = await DashboardRepository.getTotalRevenue();
 
-  console.timeEnd("end dashboard");
+  return Number(revenue[0]?.revenue ?? 0);
+}
 
-  return {
-    stats: {
-      revenue: Number(revenue[0]?.revenue ?? 0),
-      orders: totalOrders[0]?.total ?? 0,
-      customers: totalCustomers[0]?.total ?? 0,
-      books: totalBooks[0]?.total ?? 0,
-    },
-    recentOrders,
-    lowStockBooks,
-  };
+export async function getDashboardOrders() {
+  const orders = await DashboardRepository.getTotalOrders();
+
+  return orders[0]?.total ?? 0;
+}
+
+export async function getDashboardCustomers() {
+  const customers = await DashboardRepository.getTotalCustomers();
+
+  return customers[0]?.total ?? 0;
+}
+
+export async function getDashboardBooks() {
+  const books = await DashboardRepository.getTotalBooks();
+
+  return books[0]?.total ?? 0;
+}
+
+export async function getRecentOrders() {
+  return DashboardRepository.getRecentOrders();
+}
+
+export async function getLowStockBooks() {
+  return DashboardRepository.getLowStockBooks();
 }

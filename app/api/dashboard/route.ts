@@ -1,14 +1,42 @@
-import { getDashboardData } from "@/services/dashboard.service";
+import {
+  getDashboardRevenue,
+  getDashboardOrders,
+  getDashboardCustomers,
+  getDashboardBooks,
+  getRecentOrders,
+  getLowStockBooks,
+} from "@/services/dashboard.service";
 
 export async function GET() {
   try {
-    const dashboard = await getDashboardData();
+    const revenue = await getDashboardRevenue();
+    const orders = await getDashboardOrders();
+    const customers = await getDashboardCustomers();
+    const books = await getDashboardBooks();
+    const recentOrders = await getRecentOrders();
+    const lowStockBooks = await getLowStockBooks();
 
-    return Response.json(dashboard, {status: 200});
-    
+    const dashboard = {
+      stats: {
+        revenue,
+        orders,
+        customers,
+        books,
+      },
+      recentOrders,
+      lowStockBooks,
+    };
+
+    return Response.json(dashboard, { status: 200 });
   } catch (error) {
     console.error("Dashboard API error:", error);
-    return Response.json({ success: false, message: "Failed to load dashboard" },
-      { status: 500 });
+
+    return Response.json(
+      {
+        success: false,
+        message: "Failed to load dashboard",
+      },
+      { status: 500 }
+    );
   }
 }
