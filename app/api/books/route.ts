@@ -30,6 +30,8 @@ export async function GET(request: Request) {
       .offset((page - 1) * limit)
       .orderBy(desc(books.createdAt));
 
+      console.log('allBooks', allBooks)
+
     return Response.json(allBooks, { status: 200 });
   } catch (error) {
     console.error('Error fetching books:', error);
