@@ -61,6 +61,8 @@ export async function DELETE(
 ) {
   const { slug } = await params;
 
+  console.log('slug', slug)
+
   try {
     const deletedBook = await db
       .delete(books)

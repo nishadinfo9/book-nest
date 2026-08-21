@@ -17,8 +17,7 @@ export default function CartPage() {
   }
 
 
-  if (cart.items
-    .length === 0) {
+  if (cart.items.length === 0) {
     return (
       <div className='flex h-[72vh] items-center justify-center'>
         <h2 className='text-2xl font-semibold'>Your cart is empty</h2>

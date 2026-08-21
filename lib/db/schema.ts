@@ -177,7 +177,7 @@ export const authors = pgTable("authors", {
 export const wishlists = pgTable("wishlists", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id).notNull(),
-  bookId: uuid("book_id").references(() => books.id).notNull(),
+  bookId: uuid("book_id").references(() => books.id,{onDelete: 'cascade'}).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

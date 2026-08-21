@@ -81,7 +81,7 @@ export const columns = (
             <DropdownMenuItem onClick={() => onEdit(book.id)}>
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDelete(String(book.slug))}>
+            <DropdownMenuItem onClick={() => onDelete(book.slug)}>
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
