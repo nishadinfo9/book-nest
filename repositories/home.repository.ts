@@ -62,10 +62,11 @@ export const HomeRepository = {
 
     async getCategoryBooks(slug: string) {
         return db.select(baseBookSelection).from(books)
-            .innerJoin(categories, eq(categories.id, books.categoryId))
-            .innerJoin(authors, eq(authors.id, books.authorId))
-            .innerJoin(publishers, eq(publishers.id, books.publisherId))
+            .leftJoin(categories, eq(categories.id, books.categoryId))
+            .leftJoin(authors, eq(authors.id, books.authorId))
+            .leftJoin(publishers, eq(publishers.id, books.publisherId))
             .where(and(eq(categories.slug, slug), eq(books.status, 'PUBLISHED')))
+            .orderBy(desc(books.createdAt))
             .limit(10)
     },
 

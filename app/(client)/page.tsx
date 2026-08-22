@@ -14,8 +14,9 @@ const Home = () => {
     queryKey: ['home'],
     queryFn: getHomePageData,
     staleTime: 60,
-
   })
+
+  console.log('data', data)
 
   return (
     <div>
@@ -39,8 +40,20 @@ const Home = () => {
       />
 
       <BookList
+        title="Auto Biogrephy"
+        books={data?.autoBiogrephy}
+        loading={isLoading}
+      />
+
+      <BookList
         title="Historical Books"
         books={data?.historyBooks}
+        loading={isLoading}
+      />
+
+      <BookList
+        title="Self Improvement Books"
+        books={data?.selfImprovement}
         loading={isLoading}
       />
 
@@ -52,13 +65,13 @@ const Home = () => {
 
       <BookList
         title="Non-Fiction Books"
-        books={data?.englishBooks}
+        books={data?.nonFictionBooks}
         loading={isLoading}
       />
 
       <BookList
         title="Fiction Books"
-        books={data?.englishBooks}
+        books={data?.fictionBooks}
         loading={isLoading}
       />
 
