@@ -1,3 +1,4 @@
+import Loading from "@/app/loading";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import {
   Select,
@@ -46,7 +47,7 @@ export default function RHFSelect({
 
             <SelectContent>
               {loading ? (
-                <div className="p-2 text-sm">Loading...</div>
+                <Loading/>
               ) : (
                 options.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
