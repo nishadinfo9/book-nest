@@ -3,8 +3,8 @@
 import BookList from "@/components/global-components/BookList";
 import HeroBanner from "@/components/global-components/HeroBanner";
 import HeroSlide from "@/components/global-components/HeroSlide";
-import PopularAuthors from "@/components/global-components/PopularAuthors";
-import PopularPublisher from "@/components/global-components/PopularAuthors";
+import PopularAuthorPublisher from "@/components/global-components/PopularAuthorsPublisher";
+import PopularAuthors from "@/components/global-components/PopularAuthorsPublisher";
 import { getHomePageData } from "@/http/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -16,8 +16,6 @@ const Home = () => {
     staleTime: 60,
 
   })
-
-  console.log('data', data)
 
   return (
     <div>
@@ -64,7 +62,7 @@ const Home = () => {
         loading={isLoading}
       />
 
-      <PopularPublisher
+      <PopularAuthorPublisher
         title="Popular Publisher"
         authors={data?.popularPublishers}
         loading={isLoading}
